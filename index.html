@@ -1,58 +1,99 @@
-<style>
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vartdal-Transport Lagerfinner</title>
+    <style>
         :root {
-            --bg-color: #0f172a;
-            --panel-bg: #1e293b;
-            --card-bg: #334155;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --accent: #38bdf8;
-            --highlight: #22c55e;
-            --border-color: #475569;
-            --special-border: #f97316;
-            --break-bg: #312e81;
-            --break-border: #6366f1;
-            --middle-bg: #0f3854;
-            --middle-border: #0284c7;
+            --bg-color: #0f172a; --panel-bg: #1e293b; --card-bg: #334155;
+            --text-main: #f8fafc; --text-muted: #94a3b8; --accent: #38bdf8;
+            --highlight: #22c55e; --border-color: #475569; --special-border: #f97316;
+            --break-bg: #312e81; --break-border: #6366f1; --middle-bg: #0f3854;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: sans-serif; background-color: var(--bg-color); color: var(--text-main); padding: 16px; min-height: 100vh; display: flex; flex-direction: column; }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            padding: 16px;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
+        .warehouse-scroll-wrapper { width: 100%; overflow-x: auto; padding: 100px 0 20px 0; }
+        .warehouse-layout { display: flex; gap: 16px; min-width: max-content; justify-content: center; align-items: start; }
+        
+        /* Rechte Seite als Grid mit 3 Reihen */
+        .right-side-container { 
+            display: grid; 
+            grid-auto-flow: column; 
+            grid-template-rows: repeat(3, auto); 
+            gap: 12px;
+            align-items: start;
         }
 
-        /* Container, der alles hält */
-        .warehouse-scroll-wrapper { width: 100%; overflow-x: auto; padding-bottom: 16px; flex-grow: 1; }
-        
-        /* WICHTIG: Align-items: flex-start, damit die Höhen von Lager Mitte die Spalten nicht strecken */
-        .warehouse-layout { display: flex; gap: 16px; min-width: max-content; justify-content: center; align-items: flex-start; padding-top: 96px; }
-        
-        .line-column { display: flex; flex-direction: column; gap: 12px; width: 170px; flex-shrink: 0; }
-        
-        /* Wenn wir kein margin-top mehr nutzen (da padding-top am Container), 
-           müssen wir nur noch für die exakte Spalte (23/24) das Grid setzen */
-        .line-column.align-with-middle-exact {
-            display: grid;
-            grid-template-rows: auto 1fr;
-            /* Diese Spalte muss genau so hoch sein wie das Lager Mitte */
-            /* Da wir Lager Mitte in der Mitte haben, setzen wir hier eine feste Höhe */
-            height: 262px; 
-        }
-        
-        .line-column.align-with-middle-exact > .line-card:last-child { align-self: end; }
+        .line-column { display: flex; flex-direction: column; gap: 12px; width: 170px; }
+        .slot-middle { grid-row: 2; }
+        .slot-bottom { grid-row: 3; align-self: end; }
 
         .center-column { display: flex; flex-direction: column; gap: 12px; width: 180px; flex-shrink: 0; }
+        .lager-mitte { background-color: var(--middle-bg); border: 2px solid #0284c7; border-radius: 10px; padding: 20px; min-height: 180px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         
-        /* ... (Restliche Styles unverändert lassen) ... */
-        .break-room { background-color: var(--break-bg); border: 2px dashed var(--break-border); border-radius: 10px; padding: 10px; flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 70px; }
-        .lager-mitte { background-color: var(--middle-bg); border: 2px solid var(--middle-border); border-radius: 10px; padding: 20px; min-height: 180px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; box-shadow: inset 0 0 15px rgba(0,0,0,0.3); }
-        .line-card { background-color: var(--panel-bg); border: 2px solid var(--border-color); border-radius: 10px; padding: 12px; width: 100%; display: flex; flex-direction: column; position: relative; }
-        
-        /* ... (den Rest bitte aus deinem vorherigen Skript übernehmen) ... */
+        .line-card { background-color: var(--panel-bg); border: 2px solid var(--border-color); border-radius: 10px; padding: 12px; width: 100%; transition: 0.2s; position: relative; }
+        .special-card { border-color: var(--special-border) !important; background-color: #2a1b18; }
+        .line-header { background-color: var(--card-bg); border-radius: 6px; padding: 6px; text-align: center; margin-bottom: 8px; border-bottom: 3px solid var(--accent); }
+        .special-card .line-header { border-bottom-color: var(--special-border) !important; }
+        .line-number { font-weight: 800; color: var(--accent); }
+        .special-card .line-number { color: var(--special-border); }
+        .city-item { background: rgba(255,255,255,0.05); padding: 4px 8px; margin-top: 4px; border-radius: 4px; font-size: 0.8rem; }
     </style>
+</head>
+<body>
+
+    <div class="warehouse-scroll-wrapper" id="scrollWrapper">
+        <div class="warehouse-layout">
+            <div class="left-side-container" id="leftLinesContainer"></div>
+            <div class="center-column">
+                <div class="lager-mitte">📦 LAGER MIDT</div>
+            </div>
+            <div class="right-side-container" id="rightLinesContainer"></div>
+        </div>
+    </div>
+
+    <script>
+        const warehouseStructure = {
+            leftGroup: [/* ... deine Daten ... */],
+            rightGroup: [
+                { id: 23, uid: "23", name: "(R) 23", cities: ["Hønefoss"], bottomLine: { id: 24, uid: "24", name: "(R) 24", isSpecial: true, cities: ["Skeidar, Ålesund"] } },
+                { id: 25, uid: "25", name: "(R) 25", cities: ["Raufoss"] },
+                { id: 26, uid: "26", name: "(R) 26", cities: ["Gjøvik"] },
+                { id: 27, uid: "27", name: "(R) 27", cities: ["Kongsvinger"] },
+                { id: 43, uid: "43", name: "(R) 43", isSpecial: true, cities: ["Ulsteinvik"] }
+            ]
+        };
+
+        function getSlotClass(item) {
+            if ([23, 25, 26, 27].includes(item.id)) return 'slot-middle';
+            if (item.isSpecial || (item.bottomLine && item.bottomLine.isSpecial)) return 'slot-bottom';
+            return 'slot-top';
+        }
+
+        function createCard(item) {
+            const card = document.createElement('div');
+            card.className = `line-card ${item.isSpecial ? 'special-card' : ''}`;
+            card.innerHTML = `<div class="line-header"><div class="line-number">${item.name}</div></div>` +
+                             item.cities.map(c => `<div class="city-item">${c}</div>`).join('');
+            return card;
+        }
+
+        function render() {
+            const right = document.getElementById('rightLinesContainer');
+            warehouseStructure.rightGroup.forEach(i => {
+                const col = document.createElement('div');
+                col.className = 'line-column ' + getSlotClass(i);
+                if (i.bottomLine) col.style.gridRow = "span 2"; // Spalte spannt über 2 Reihen
+                
+                col.appendChild(createCard(i));
+                if(i.bottomLine) col.appendChild(createCard(i.bottomLine));
+                right.appendChild(col);
+            });
+        }
+        render();
+    </script>
+</body>
+</html>

@@ -9,16 +9,18 @@
             --bg-color: #0f172a; --panel-bg: #1e293b; --card-bg: #334155;
             --text-main: #f8fafc; --text-muted: #94a3b8; --accent: #38bdf8;
             --highlight: #22c55e; --border-color: #475569; --special-border: #f97316;
-            --break-bg: #312e81; --break-border: #6366f1; --middle-bg: #0f3854;
+            --middle-bg: #0f3854;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: sans-serif; background-color: var(--bg-color); color: var(--text-main); padding: 16px; min-height: 100vh; display: flex; flex-direction: column; }
+        body { font-family: sans-serif; background-color: var(--bg-color); color: var(--text-main); padding: 16px; min-height: 100vh; }
 
-        .warehouse-scroll-wrapper { width: 100%; overflow-x: auto; padding: 100px 0 20px 0; }
+        .warehouse-scroll-wrapper { width: 100%; overflow-x: auto; padding-top: 100px; }
         .warehouse-layout { display: flex; gap: 16px; min-width: max-content; justify-content: center; align-items: start; }
         
-        /* Rechte Seite als Grid mit 3 Reihen */
+        .line-column { display: flex; flex-direction: column; gap: 12px; width: 170px; }
+        
+        /* Rechte Seite: Grid mit 3 Reihen */
         .right-side-container { 
             display: grid; 
             grid-auto-flow: column; 
@@ -27,25 +29,21 @@
             align-items: start;
         }
 
-        .line-column { display: flex; flex-direction: column; gap: 12px; width: 170px; }
         .slot-middle { grid-row: 2; }
         .slot-bottom { grid-row: 3; align-self: end; }
 
-        .center-column { display: flex; flex-direction: column; gap: 12px; width: 180px; flex-shrink: 0; }
-        .lager-mitte { background-color: var(--middle-bg); border: 2px solid #0284c7; border-radius: 10px; padding: 20px; min-height: 180px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .center-column { display: flex; flex-direction: column; gap: 12px; width: 180px; }
+        .lager-mitte { background-color: var(--middle-bg); border: 2px solid #0284c7; border-radius: 10px; padding: 20px; text-align: center; font-weight: bold; }
         
-        .line-card { background-color: var(--panel-bg); border: 2px solid var(--border-color); border-radius: 10px; padding: 12px; width: 100%; transition: 0.2s; position: relative; }
+        .line-card { background-color: var(--panel-bg); border: 2px solid var(--border-color); border-radius: 10px; padding: 12px; }
         .special-card { border-color: var(--special-border) !important; background-color: #2a1b18; }
-        .line-header { background-color: var(--card-bg); border-radius: 6px; padding: 6px; text-align: center; margin-bottom: 8px; border-bottom: 3px solid var(--accent); }
-        .special-card .line-header { border-bottom-color: var(--special-border) !important; }
-        .line-number { font-weight: 800; color: var(--accent); }
-        .special-card .line-number { color: var(--special-border); }
-        .city-item { background: rgba(255,255,255,0.05); padding: 4px 8px; margin-top: 4px; border-radius: 4px; font-size: 0.8rem; }
+        .line-header { font-weight: 800; color: var(--accent); margin-bottom: 8px; border-bottom: 2px solid var(--accent); }
+        .city-item { font-size: 0.8rem; margin-top: 4px; color: #cbd5e1; }
     </style>
 </head>
 <body>
 
-    <div class="warehouse-scroll-wrapper" id="scrollWrapper">
+    <div class="warehouse-scroll-wrapper">
         <div class="warehouse-layout">
             <div class="left-side-container" id="leftLinesContainer"></div>
             <div class="center-column">
@@ -57,42 +55,52 @@
 
     <script>
         const warehouseStructure = {
-            leftGroup: [/* ... deine Daten ... */],
+            leftGroup: [
+                { id: 1, name: "(L) Linje 1", cities: ["Molde", "Ålesund"] }
+            ],
             rightGroup: [
-                { id: 23, uid: "23", name: "(R) 23", cities: ["Hønefoss"], bottomLine: { id: 24, uid: "24", name: "(R) 24", isSpecial: true, cities: ["Skeidar, Ålesund"] } },
-                { id: 25, uid: "25", name: "(R) 25", cities: ["Raufoss"] },
-                { id: 26, uid: "26", name: "(R) 26", cities: ["Gjøvik"] },
-                { id: 27, uid: "27", name: "(R) 27", cities: ["Kongsvinger"] },
-                { id: 43, uid: "43", name: "(R) 43", isSpecial: true, cities: ["Ulsteinvik"] }
+                { id: 23, name: "(R) 23", cities: ["Hønefoss"], bottomLine: { id: 24, name: "(R) 24", isSpecial: true, cities: ["Skeidar, Ålesund"] } },
+                { id: 25, name: "(R) 25", cities: ["Raufoss"] },
+                { id: 26, name: "(R) 26", cities: ["Gjøvik"] },
+                { id: 43, name: "(R) 43", isSpecial: true, cities: ["Ulsteinvik"] }
             ]
         };
-
-        function getSlotClass(item) {
-            if ([23, 25, 26, 27].includes(item.id)) return 'slot-middle';
-            if (item.isSpecial || (item.bottomLine && item.bottomLine.isSpecial)) return 'slot-bottom';
-            return 'slot-top';
-        }
 
         function createCard(item) {
             const card = document.createElement('div');
             card.className = `line-card ${item.isSpecial ? 'special-card' : ''}`;
-            card.innerHTML = `<div class="line-header"><div class="line-number">${item.name}</div></div>` +
+            card.innerHTML = `<div class="line-header">${item.name}</div>` +
                              item.cities.map(c => `<div class="city-item">${c}</div>`).join('');
             return card;
         }
 
         function render() {
+            // Links
+            const left = document.getElementById('leftLinesContainer');
+            warehouseStructure.leftGroup.forEach(i => {
+                const col = document.createElement('div');
+                col.className = 'line-column';
+                col.appendChild(createCard(i));
+                left.appendChild(col);
+            });
+
+            // Rechts
             const right = document.getElementById('rightLinesContainer');
             warehouseStructure.rightGroup.forEach(i => {
                 const col = document.createElement('div');
-                col.className = 'line-column ' + getSlotClass(i);
-                if (i.bottomLine) col.style.gridRow = "span 2"; // Spalte spannt über 2 Reihen
+                // Slot-Logik
+                if ([23, 25, 26].includes(i.id)) col.className = 'line-column slot-middle';
+                else if (i.isSpecial || (i.bottomLine && i.bottomLine.isSpecial)) col.className = 'line-column slot-bottom';
+                else col.className = 'line-column';
+                
+                if (i.bottomLine) col.style.gridRow = "span 2";
                 
                 col.appendChild(createCard(i));
                 if(i.bottomLine) col.appendChild(createCard(i.bottomLine));
                 right.appendChild(col);
             });
         }
+        
         render();
     </script>
 </body>

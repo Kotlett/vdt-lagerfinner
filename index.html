@@ -52,11 +52,16 @@
         
         .line-column { display: flex; flex-direction: column; gap: 12px; width: 170px; flex-shrink: 0; }
         .line-column.align-with-middle { margin-top: 96px; }
+        
+        /* Exakte Ausrichtung für Spalte 23/24 am Pauseraum-Versatz + Lager Mitte */
         .line-column.align-with-middle-exact {
             margin-top: 96px;
             height: calc(100% - 96px);
             justify-content: space-between;
         }
+        /* Zwang, dass Karte 23 und 24 in dieser Spezialspalte exakt den Raum ausfüllen */
+        .line-column.align-with-middle-exact > .line-card:first-child { flex: 0 0 auto; }
+        .line-column.align-with-middle-exact > .line-card:last-child { margin-top: auto; }
 
         .left-side-container, .right-side-container { display: flex; gap: 12px; }
         

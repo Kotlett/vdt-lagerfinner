@@ -3,55 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vartdal-Transport Lagerfinner</title>
+    <title>Vartdal-Transport Lagerfinner - Komplette Oversikt</title>
     <style>
         :root {
-            --bg-color: #0f172a; 
-            --panel-bg: #1e293b; 
+            --bg-color: #0f172a;
+            --panel-bg: #1e293b;
             --card-bg: #334155;
-            --text-main: #f8fafc; 
-            --text-muted: #94a3b8; 
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
             --accent: #38bdf8;
-            --highlight: #22c55e; 
-            --border-color: #475569; 
+            --highlight: #22c55e;
+            --border-color: #475569;
             --special-border: #f97316;
-            --break-bg: #312e81; 
-            --break-border: #6366f1; 
+            --break-bg: #312e81;
+            --break-border: #6366f1;
             --middle-bg: #0f3854;
+            --middle-border: #0284c7;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        
-        body { 
-            font-family: sans-serif; 
-            background-color: var(--bg-color); 
-            color: var(--text-main); 
-            padding: 16px; 
-            min-height: 100vh; 
-            display: flex; 
-            flex-direction: column; 
-        }
 
-        .warehouse-scroll-wrapper { 
-            width: 100%; 
-            overflow-x: auto; 
-            padding: 40px 0 20px 0; 
-        }
-        
-        .warehouse-layout { 
-            display: flex; 
-            gap: 16px; 
-            min-width: max-content; 
-            justify-content: center; 
-            align-items: start; 
-        }
-        
-        .left-side-container {
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            padding: 16px;
             display: flex;
-            gap: 12px;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
-        /* Rechte Seite als Grid mit 3 Reihen */
+        header { max-width: 1400px; margin: 0 auto 16px auto; width: 100%; text-align: center; }
+        h1 { font-size: 1.5rem; font-weight: 700; margin-bottom: 4px; }
+        .subtitle { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 16px; }
+
+        .search-box { position: sticky; top: 12px; z-index: 100; max-width: 600px; margin: 0 auto 20px auto; width: 100%; display: flex; align-items: center; }
+        #searchInput { width: 100%; padding: 16px 55px 16px 50px; font-size: 1.25rem; font-weight: 600; border: 2px solid var(--accent); border-radius: 12px; background-color: var(--panel-bg); color: #ffffff; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5); outline: none; }
+        #searchInput:focus { border-color: var(--highlight); box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.25); }
+        
+        .clear-btn { position: absolute; left: 16px; background: none; border: none; color: var(--text-muted); font-size: 1.3rem; cursor: pointer; padding: 4px; display: none; align-items: center; justify-content: center; z-index: 5; width: 30px; height: 30px; }
+        .clear-btn:hover { color: #ffffff; }
+
+        .search-btn { position: absolute; right: 16px; background: none; border: none; color: var(--accent); font-size: 1.4rem; cursor: pointer; padding: 4px; display: flex; align-items: center; justify-content: center; z-index: 5; width: 30px; height: 30px; }
+        .search-btn:hover { color: var(--highlight); }
+
+        .warehouse-scroll-wrapper { width: 100%; overflow-x: auto; padding: 40px 0 20px 0; scroll-behavior: smooth; }
+        .warehouse-layout { display: flex; gap: 16px; min-width: max-content; align-items: start; justify-content: center; }
+        
+        .left-side-container { display: flex; gap: 12px; align-items: start; }
+        
+        /* Rechte Seite als Grid mit 3 Reihen für perfekte Ausrichtung */
         .right-side-container { 
             display: grid; 
             grid-auto-flow: column; 
@@ -60,18 +61,13 @@
             align-items: start;
         }
 
-        .line-column { 
-            display: flex; 
-            flex-direction: column; 
-            gap: 12px; 
-            width: 170px; 
-        }
+        .line-column { display: flex; flex-direction: column; gap: 12px; width: 170px; }
         
+        .slot-top { grid-row: 1; }
         .slot-middle { grid-row: 2; }
         .slot-bottom { grid-row: 3; align-self: end; }
-        .slot-top { grid-row: 1; }
 
-        /* Fester, sticky Container für die Mitte beim Scrollen */
+        /* Feststehende Mitte beim Scrollen */
         .center-column { 
             display: flex; 
             flex-direction: column; 
@@ -81,95 +77,63 @@
             position: sticky; 
             left: 50%; 
             transform: translateX(-50%);
-            z-index: 10; 
+            z-index: 50; 
         }
 
-        .break-room { 
-            background-color: var(--break-bg); 
-            border: 2px dashed var(--break-border); 
-            border-radius: 10px; 
-            padding: 10px; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: center; 
-            text-align: center; 
-            min-height: 70px; 
-        }
+        .break-room { background-color: var(--break-bg); border: 2px dashed var(--break-border); border-radius: 10px; padding: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 70px; }
+        .break-room .icon { font-size: 1.3rem; margin-bottom: 2px; }
+        .break-room .title { font-weight: 800; font-size: 0.85rem; color: #a5b4fc; }
 
-        .lager-mitte { 
-            background-color: var(--middle-bg); 
-            border: 2px solid #0284c7; 
-            border-radius: 10px; 
-            padding: 20px; 
-            min-height: 180px; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: center; 
-            text-align: center;
-        }
+        .lager-mitte { background-color: var(--middle-bg); border: 2px solid var(--middle-border); border-radius: 10px; padding: 20px; min-height: 180px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; box-shadow: inset 0 0 15px rgba(0,0,0,0.3); }
+        .lager-mitte .icon { font-size: 2.2rem; margin-bottom: 8px; }
+        .lager-mitte .title { font-weight: 800; font-size: 1.1rem; color: #7dd3fc; letter-spacing: 1px; }
         
-        .line-card { 
-            background-color: var(--panel-bg); 
-            border: 2px solid var(--border-color); 
-            border-radius: 10px; 
-            padding: 12px; 
-            width: 100%; 
-            transition: 0.2s; 
-            position: relative; 
-        }
+        .line-card { background-color: var(--panel-bg); border: 2px solid var(--border-color); border-radius: 10px; padding: 12px; width: 100%; display: flex; flex-direction: column; transition: all 0.25s ease; position: relative; }
+        .card-uid { position: absolute; top: 4px; left: 8px; font-size: 0.6rem; color: var(--text-muted); opacity: 0.5; }
+        .special-card { border-color: var(--special-border) !important; background-color: #2a1b18; }
+        .line-header { background-color: var(--card-bg); border-radius: 6px; padding: 8px; text-align: center; margin-top: 8px; margin-bottom: 10px; border-bottom: 3px solid var(--accent); }
+        .special-card .line-header { border-bottom-color: var(--special-border) !important; }
+        .line-number { font-size: 1rem; font-weight: 800; color: var(--accent); }
+        .special-card .line-number { color: var(--special-border); }
         
-        .special-card { 
-            border-color: var(--special-border) !important; 
-            background-color: #2a1b18; 
-        }
-        
-        .line-header { 
-            background-color: var(--card-bg); 
-            border-radius: 6px; 
-            padding: 6px; 
-            text-align: center; 
-            margin-bottom: 8px; 
-            border-bottom: 3px solid var(--accent); 
-        }
-        
-        .special-card .line-header { 
-            border-bottom-color: var(--special-border) !important; 
-        }
-        
-        .line-number { 
-            font-weight: 800; 
-            color: var(--accent); 
-        }
-        
-        .special-card .line-number { 
-            color: var(--special-border); 
-        }
-        
-        .city-item { 
-            background: rgba(255,255,255,0.05); 
-            padding: 4px 8px; 
-            margin-top: 4px; 
-            border-radius: 4px; 
-            font-size: 0.8rem; 
-        }
+        .city-list { display: flex; flex-direction: column; gap: 6px; flex-grow: 1; }
+        .city-item { background-color: rgba(255, 255, 255, 0.05); padding: 6px 8px; border-radius: 6px; font-size: 0.85rem; color: #e2e8f0; }
+        .line-card.active { border-color: var(--highlight) !important; background-color: #064e3b !important; transform: translateY(-4px); box-shadow: 0 10px 20px -5px rgba(34, 197, 94, 0.4); }
+        .city-item.match { background-color: var(--highlight); color: #ffffff; font-weight: 700; }
+        .line-card.dimmed { opacity: 0.25; filter: grayscale(80%); }
     </style>
 </head>
 <body>
 
+    <header>
+        <h1>Vartdal-Transport Lagerfinner</h1>
+        <p class="subtitle">Skriv inn stedsnavn og trykk Enter for å søke / hoppe til neste resultat.</p>
+    </header>
+
+    <div class="search-box">
+        <button id="clearBtn" class="clear-btn" title="Nullstill søk">✕</button>
+        <input type="text" id="searchInput" placeholder="Søk etter sted..." autofocus autocomplete="off">
+        <button id="searchBtn" class="search-btn" title="Søk / Neste resultat">➔</button>
+    </div>
+
     <div class="warehouse-scroll-wrapper" id="scrollWrapper">
         <div class="warehouse-layout">
+            <!-- Linke Seite -->
             <div class="left-side-container" id="leftLinesContainer"></div>
-            
-            <div class="center-column">
+
+            <!-- Mitte (Sticky) -->
+            <div class="center-column" id="centerColumn">
                 <div class="break-room">
-                    <div style="font-size: 1.2rem;">☕</div>
-                    <div style="font-weight: 800; font-size: 0.8rem; color: #a5b4fc;">PAUSEROM</div>
+                    <div class="icon">☕</div>
+                    <div class="title">PAUSEROM</div>
                 </div>
-                <div class="lager-mitte">📦 LAGER MIDT</div>
+                <div class="lager-mitte">
+                    <div class="icon">📦</div>
+                    <div class="title">LAGER MIDT</div>
+                </div>
             </div>
-            
+
+            <!-- Rechte Seite -->
             <div class="right-side-container" id="rightLinesContainer"></div>
         </div>
     </div>
@@ -177,16 +141,76 @@
     <script>
         const warehouseStructure = {
             leftGroup: [
-                /* Hier deine linken Spalten falls benötigt */
+                { id: 1, uid: "1", name: "(L) Linje 1", cities: ["Malmefjord", "Eide"] },
+                { id: 2, uid: "2", name: "(L) Linje 2", cities: ["Molde", "Vestnes"] },
+                { id: 3, uid: "3", name: "(L) Linje 3", cities: ["Kristiansund"] },
+                { id: 4, uid: "4", name: "(L) Linje 4", cities: ["Kristiansand"] },
+                { id: 5, uid: "5", name: "(L) Linje 5", cities: ["Arendal", "Grimstad", "Kragerø / Fevik", "Sannidal / Risør"] },
+                { id: 6, uid: "6", name: "(L) Linje 6", cities: ["Porsgrunn", "Skien", "Stathelle", "Rjukan"] },
+                { id: 7, uid: "7", name: "(L) Linje 7", cities: ["Sandefjord", "Larvik", "Stavern"] },
+                { id: 8, uid: "8", name: "(L) Linje 8", cities: ["Tønsberg", "Horten", "Holmestrand"] },
+                { id: 9, uid: "9", name: "(L) Linje 9", cities: ["Fredrikstad", "Rolvsøy", "Sarpsborg", "Mysen / Rakkestad", "Berg i Østfold", "Halden"] },
+                { id: 10, uid: "10", name: "(L) Linje 10", cities: ["Vinterbro", "Ski", "Moss", "Langhus", "Drøbak", "Vestby"] },
+                { id: 11, uid: "11", name: "(L) Linje 11", cities: ["Terminal Ramberg", "Bjørkelangen", "Aurskog"] },
+                { id: 12, uid: "12", name: "(L) Linje 12", cities: ["Frogner"] },
+                { id: 13, uid: "13", name: "(L) Linje 13", cities: ["Møbelringen Alna", "Billingstad"] },
+                { id: 14, uid: "14", name: "(L) Linje 14", cities: ["Skeidar (Oslo)", "A-Møbler (Oslo)", "Bohus Alna (Oslo)"] },
+                { id: 15, uid: "15", name: "(L) Linje 15", cities: ["Drammen"] },
+                { id: 16, uid: "16", name: "(L) Linje 16", cities: ["Nesbru"] },
+                { id: 17, uid: "17", name: "(L) Linje 17", cities: ["Notodden", "Mjøndalen", "Kongsberg", "Hokksund"] },
+                { id: 18, uid: "18", name: "(L) Linje 18", cities: ["Lillestrøm", "Skedsmokorset", "Strømmen", "Hagan"] },
+                { id: 19, uid: "19", name: "(L) Linje 19", cities: ["Møbelringen Lørenskog"] },
+                { id: 20, uid: "20", name: "(L) Linje 20", cities: ["Logistikk", "Bohus", "Fetsund"] },
+                { id: 21, uid: "21", name: "(L) Linje 21", cities: ["Leira / Geilo", "Fagernes", "Gol. / Nesbyen", "Røn"], bottomLine: { id: 22, uid: "22", name: "(L) Linje 22", isSpecial: true, cities: ["Ålesund", "Brattvåg / Søvik", "Digernes", "Giske / Valerøy / Vigra", "Hellandshamn", "Åheim"] } }
             ],
             rightGroup: [
-                { id: 23, uid: "23", name: "(R) 23", cities: ["Hønefoss"], bottomLine: { id: 24, uid: "24", name: "(R) 24", isSpecial: true, cities: ["Skeidar, Ålesund"] } },
-                { id: 25, uid: "25", name: "(R) 25", cities: ["Raufoss"] },
-                { id: 26, uid: "26", name: "(R) 26", cities: ["Gjøvik"] },
-                { id: 27, uid: "27", name: "(R) 27", cities: ["Kongsvinger"] },
-                { id: 43, uid: "43", name: "(R) 43", isSpecial: true, cities: ["Ulsteinvik"] }
+                { id: 23, uid: "23", name: "(R) Linje 23", cities: ["Hønefoss"], bottomLine: { id: 24, uid: "24", name: "(R) Linje 24", isSpecial: true, cities: ["Skeidar, Ålesund"] } },
+                { id: 25, uid: "25", name: "(R) Linje 25", cities: ["Raufoss"] },
+                { id: 26, uid: "26", name: "(R) Linje 26", cities: ["Gjøvik", "Gran", "Dokka", "Lena", "Harestua"] },     
+                { id: 27, uid: "27", name: "(R) Linje 27", cities: ["Kongsvinger", "Årnes", "Skarnes"] },
+                { id: 28, uid: "28", name: "(R) Linje 28", cities: ["Sauda, Bremnes"], bottomLine: { id: 29, uid: "29", name: "(R) Linje 29", cities: ["Elverum", "Trysil"] } },
+                { id: 30, uid: "30", name: "(R) Linje 30", cities: ["Åkrehamn, Kopervik"], bottomLine: { id: 31, uid: "31", name: "(R) Linje 31", cities: ["Hamar", "Furnes", "Brumunddal"] } },
+                { id: 32, uid: "32", name: "(R) Linje 32", cities: ["Haugesund Terminal", "Stord", "Fitjar"], bottomLine: { id: 33, uid: "33", name: "(R) Linje 33", cities: ["Jessheim", "Dal", "Eidsvoll"] } },
+                { id: 34, uid: "34", name: "(R) Linje 34", cities: ["Bohus Vikse, Haugesund"], bottomLine: { id: 35, uid: "35", name: "(R) Linje 35", cities: ["Lillehammer", "Otta / Sørfron", "Åndalsnes"] } },
+                { id: 36, uid: "36", name: "(R) Linje 36", cities: ["Møbelringen Math Lande, Haugesund"], bottomLine: { id: 37, uid: "37", name: "(R) Linje 37", cities: ["Slettvoll Oslo"] } },
+                { id: 38, uid: "38", name: "(R) Linje 38", cities: ["Haugesund, Skeidar"], bottomLine: { id: 39, uid: "39", name: "(R) Linje 39", cities: ["Slettvoll In-Design, Fine Møbler Haugesund"] } },
+                { id: 40, uid: "40", name: "(R) Linje 40", cities: ["Ølen, Etne"], bottomLine: { id: 41, uid: "41", name: "(R) Linje 41", cities: ["Flekkefjord", "Egersund", "Lyngdal", "Mandal"] } },
+                { id: 42, uid: "42", name: "(R) Linje 42", cities: ["Bryne", "Kleppe"], bottomLine: { id: 43, uid: "43", name: "(R) Linje 43", isSpecial: true, cities: ["Ulsteinvik", "Hareid", "Fosnavåg"] } },
+                { id: 44, uid: "44", name: "(R) Linje 44", cities: ["Stavanger Terminal", "Haukaas", "Jørpeland", "Slettvoll"], bottomLine: { id: 45, uid: "45", name: "(R) Linje 45", isSpecial: true, cities: ["Hovdebygda", "Ørsta", "Volda"] } },
+                { id: 46, uid: "46", name: "(R) Linje 46", cities: ["Stavanger", "Skeidar Tvedtsenter", "Skeidar Forus", "Fagmøbler Forus"] },
+                { id: 47, uid: "47", name: "(R) Linje 47", cities: ["Sandnes"] },
+                { id: 48, uid: "48", name: "(R) Linje 48", cities: ["Straume", "Godvik"], bottomLine: { id: 49, uid: "49", name: "(R) Linje 49", isSpecial: true, cities: ["Førde", "Florø", "Sandane", "Nordfjordeid", "Stryn", "Leirvik i Sogn", "Byastad"] } },
+                { id: 50, uid: "50", name: "(R) Linje 50", cities: ["Fyllingsdalen", "Kleppestø", "Strusshamn"] },
+                { id: 51, uid: "51", name: "(R) Linje 51", cities: ["Slettvoll Nyborg", "Ulset"] },
+                { id: 52, uid: "52", name: "(R) Linje 52", cities: ["Isdalstø Front", "Rådal 2 Bak"], bottomLine: { id: 53, uid: "53", name: "(R) Linje 53", isSpecial: true, cities: ["Mosjøen", "Mo i Rana", "Sandnessjøen", "Brønnøysund", "Fauske", "Harstad", "Bardu", "Finnsnes", "Tromsø", "Bodø", "Lofoten"] } },
+                { id: 54, uid: "54", name: "(R) Linje 54", cities: ["Rådal", "Nesstun", "Kokstad", "Blomsterdalen", "Paradis"] },
+                { id: 55, uid: "55", name: "(R) Linje 55", cities: ["Sogndal", "Kaupanger", "Øvre Årdal", "Voss", "Øystese"] },
+                { id: 56, uid: "56", name: "(R) Linje 56", cities: ["Namsos", "Spillum", "Kolvereid", "Steinkjær"] },
+                { id: 57, uid: "57", name: "(R) Linje 57", cities: ["Stjørdal", "Verdal", "Levanger"] },
+                { id: 58, uid: "58", name: "(R) Linje 58", cities: ["Møbelringen Lade", "Bohus Bo Møbler", "Bohus Tynset"] },
+                { id: 59, uid: "59", name: "(R) Linje 59", cities: ["Skeidar Trondheim", "Tiller", "Orkanger", "Slettvoll Berge"] },
+                { id: 60, uid: "60", name: "(R) Linje 60", cities: ["Terminal Trøndelag", "Hitra", "Røros", "Brekstad", "Åfjord", "Kyrkjeseterøyra"] },
+                { id: 61, uid: "61", name: "(R) Linje 61", cities: ["Orkanger", "Surnadal", "Sunndalsøra", "Oppdal", "Leinstrand"], bottomLine: { id: 62, uid: "62", name: "(R) Linje 62", isSpecial: true, cities: ["Finnmark", "Sortland", "Bardufoss", "Lofoten", "Sandnessjøen", "Brønnøysund"] } }
             ]
         };
+
+        function normalizeText(t) { return t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[æøå]/g, m => ({'æ':'a','ø':'o','å':'a'}[m])); }
+
+        function createCard(item) {
+            const card = document.createElement('div');
+            card.className = `line-card ${item.isSpecial ? 'special-card' : ''}`;
+            card.id = `line-card-${item.id}`;
+            card.innerHTML = `<span class="card-uid">#${item.uid}</span><div class="line-header"><div class="line-number">${item.name}</div></div><div class="city-list"></div>`;
+            const list = card.querySelector('.city-list');
+            item.cities.forEach(c => {
+                const div = document.createElement('div');
+                div.className = 'city-item';
+                div.textContent = c;
+                div.setAttribute('data-city-norm', normalizeText(c));
+                list.appendChild(div);
+            });
+            return card;
+        }
 
         function getSlotClass(item) {
             if ([23, 25, 26, 27].includes(item.id)) return 'slot-middle';
@@ -194,16 +218,21 @@
             return 'slot-top';
         }
 
-        function createCard(item) {
-            const card = document.createElement('div');
-            card.className = `line-card ${item.isSpecial ? 'special-card' : ''}`;
-            card.innerHTML = `<div class="line-header"><div class="line-number">${item.name}</div></div>` +
-                             item.cities.map(c => `<div class="city-item">${c}</div>`).join('');
-            return card;
-        }
-
         function render() {
+            const left = document.getElementById('leftLinesContainer');
             const right = document.getElementById('rightLinesContainer');
+            
+            // Linke Gruppe rendern (normales Flex)
+            warehouseStructure.leftGroup.forEach(i => {
+                const col = document.createElement('div');
+                col.className = 'line-column';
+                if (i.bottomLine) col.style.justifyContent = "space-between";
+                col.appendChild(createCard(i));
+                if(i.bottomLine) col.appendChild(createCard(i.bottomLine));
+                left.appendChild(col);
+            });
+
+            // Rechte Gruppe rendern (mit Grid-Slots für perfekte Ausrichtung)
             warehouseStructure.rightGroup.forEach(i => {
                 const col = document.createElement('div');
                 col.className = 'line-column ' + getSlotClass(i);
@@ -213,7 +242,80 @@
                 if(i.bottomLine) col.appendChild(createCard(i.bottomLine));
                 right.appendChild(col);
             });
+
+            setTimeout(() => {
+                centerOnElement(document.getElementById('centerColumn'), 'auto');
+            }, 100);
         }
+
+        function centerOnElement(el, behavior = 'smooth') {
+            if (!el) return;
+            const scrollWrapper = document.getElementById('scrollWrapper');
+            const targetLeft = el.offsetLeft - (scrollWrapper.clientWidth / 2) + (el.clientWidth / 2);
+            scrollWrapper.scrollTo({ left: targetLeft, behavior: behavior });
+        }
+
+        let lastSearchQuery = "";
+        let matchCards = [];
+        let currentMatchIndex = 0;
+
+        const searchInput = document.getElementById('searchInput');
+        const clearBtn = document.getElementById('clearBtn');
+        const searchBtn = document.getElementById('searchBtn');
+
+        function performSearch(queryText) {
+            const val = normalizeText(queryText.trim());
+            const allCards = document.querySelectorAll('.line-card');
+            
+            clearBtn.style.display = queryText.length > 0 ? 'flex' : 'none';
+
+            if (val === "") {
+                allCards.forEach(card => {
+                    card.classList.remove('active', 'dimmed');
+                    card.querySelectorAll('.city-item').forEach(el => el.classList.remove('match'));
+                });
+                lastSearchQuery = "";
+                matchCards = [];
+                currentMatchIndex = 0;
+                return;
+            }
+
+            if (val !== lastSearchQuery) {
+                lastSearchQuery = val;
+                matchCards = [];
+                currentMatchIndex = 0;
+
+                allCards.forEach(card => {
+                    const items = card.querySelectorAll('.city-item');
+                    let match = false;
+                    
+                    items.forEach(el => {
+                        const isMatch = val.length >= 2 && el.getAttribute('data-city-norm').includes(val);
+                        el.classList.toggle('match', isMatch);
+                        if(isMatch) match = true;
+                    });
+                    
+                    card.classList.toggle('active', val.length >= 2 && match);
+                    card.classList.toggle('dimmed', val.length >= 2 && !match);
+
+                    if (match && val.length >= 2) {
+                        matchCards.push(card);
+                    }
+                });
+            } else if (matchCards.length > 0) {
+                currentMatchIndex = (currentMatchIndex + 1) % matchCards.length;
+            }
+
+            if (matchCards.length > 0) {
+                centerOnElement(matchCards[currentMatchIndex]);
+            }
+        }
+
+        searchInput.addEventListener('input', (e) => performSearch(e.target.value));
+        searchInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') performSearch(e.target.value); });
+        searchBtn.addEventListener('click', () => performSearch(searchInput.value));
+        clearBtn.addEventListener('click', () => { searchInput.value = ""; performSearch(""); searchInput.focus(); });
+
         render();
     </script>
 </body>

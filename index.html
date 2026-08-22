@@ -6,18 +6,51 @@
     <title>Vartdal-Transport Lagerfinner</title>
     <style>
         :root {
-            --bg-color: #0f172a; --panel-bg: #1e293b; --card-bg: #334155;
-            --text-main: #f8fafc; --text-muted: #94a3b8; --accent: #38bdf8;
-            --highlight: #22c55e; --border-color: #475569; --special-border: #f97316;
-            --break-bg: #312e81; --break-border: #6366f1; --middle-bg: #0f3854;
+            --bg-color: #0f172a; 
+            --panel-bg: #1e293b; 
+            --card-bg: #334155;
+            --text-main: #f8fafc; 
+            --text-muted: #94a3b8; 
+            --accent: #38bdf8;
+            --highlight: #22c55e; 
+            --border-color: #475569; 
+            --special-border: #f97316;
+            --break-bg: #312e81; 
+            --break-border: #6366f1; 
+            --middle-bg: #0f3854;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: sans-serif; background-color: var(--bg-color); color: var(--text-main); padding: 16px; min-height: 100vh; display: flex; flex-direction: column; }
-
-        .warehouse-scroll-wrapper { width: 100%; overflow-x: auto; padding: 100px 0 20px 0; }
-        .warehouse-layout { display: flex; gap: 16px; min-width: max-content; justify-content: center; align-items: start; }
         
+        body { 
+            font-family: sans-serif; 
+            background-color: var(--bg-color); 
+            color: var(--text-main); 
+            padding: 16px; 
+            min-height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+        }
+
+        .warehouse-scroll-wrapper { 
+            width: 100%; 
+            overflow-x: auto; 
+            padding: 40px 0 20px 0; 
+        }
+        
+        .warehouse-layout { 
+            display: flex; 
+            gap: 16px; 
+            min-width: max-content; 
+            justify-content: center; 
+            align-items: start; 
+        }
+        
+        .left-side-container {
+            display: flex;
+            gap: 12px;
+        }
+
         /* Rechte Seite als Grid mit 3 Reihen */
         .right-side-container { 
             display: grid; 
@@ -27,20 +60,100 @@
             align-items: start;
         }
 
-        .line-column { display: flex; flex-direction: column; gap: 12px; width: 170px; }
+        .line-column { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 12px; 
+            width: 170px; 
+        }
+        
         .slot-middle { grid-row: 2; }
         .slot-bottom { grid-row: 3; align-self: end; }
+        .slot-top { grid-row: 1; }
 
-        .center-column { display: flex; flex-direction: column; gap: 12px; width: 180px; flex-shrink: 0; }
-        .lager-mitte { background-color: var(--middle-bg); border: 2px solid #0284c7; border-radius: 10px; padding: 20px; min-height: 180px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        /* Fester, sticky Container für die Mitte beim Scrollen */
+        .center-column { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 12px; 
+            width: 180px; 
+            flex-shrink: 0; 
+            position: sticky; 
+            left: 50%; 
+            transform: translateX(-50%);
+            z-index: 10; 
+        }
+
+        .break-room { 
+            background-color: var(--break-bg); 
+            border: 2px dashed var(--break-border); 
+            border-radius: 10px; 
+            padding: 10px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            text-align: center; 
+            min-height: 70px; 
+        }
+
+        .lager-mitte { 
+            background-color: var(--middle-bg); 
+            border: 2px solid #0284c7; 
+            border-radius: 10px; 
+            padding: 20px; 
+            min-height: 180px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            text-align: center;
+        }
         
-        .line-card { background-color: var(--panel-bg); border: 2px solid var(--border-color); border-radius: 10px; padding: 12px; width: 100%; transition: 0.2s; position: relative; }
-        .special-card { border-color: var(--special-border) !important; background-color: #2a1b18; }
-        .line-header { background-color: var(--card-bg); border-radius: 6px; padding: 6px; text-align: center; margin-bottom: 8px; border-bottom: 3px solid var(--accent); }
-        .special-card .line-header { border-bottom-color: var(--special-border) !important; }
-        .line-number { font-weight: 800; color: var(--accent); }
-        .special-card .line-number { color: var(--special-border); }
-        .city-item { background: rgba(255,255,255,0.05); padding: 4px 8px; margin-top: 4px; border-radius: 4px; font-size: 0.8rem; }
+        .line-card { 
+            background-color: var(--panel-bg); 
+            border: 2px solid var(--border-color); 
+            border-radius: 10px; 
+            padding: 12px; 
+            width: 100%; 
+            transition: 0.2s; 
+            position: relative; 
+        }
+        
+        .special-card { 
+            border-color: var(--special-border) !important; 
+            background-color: #2a1b18; 
+        }
+        
+        .line-header { 
+            background-color: var(--card-bg); 
+            border-radius: 6px; 
+            padding: 6px; 
+            text-align: center; 
+            margin-bottom: 8px; 
+            border-bottom: 3px solid var(--accent); 
+        }
+        
+        .special-card .line-header { 
+            border-bottom-color: var(--special-border) !important; 
+        }
+        
+        .line-number { 
+            font-weight: 800; 
+            color: var(--accent); 
+        }
+        
+        .special-card .line-number { 
+            color: var(--special-border); 
+        }
+        
+        .city-item { 
+            background: rgba(255,255,255,0.05); 
+            padding: 4px 8px; 
+            margin-top: 4px; 
+            border-radius: 4px; 
+            font-size: 0.8rem; 
+        }
     </style>
 </head>
 <body>
@@ -48,16 +161,24 @@
     <div class="warehouse-scroll-wrapper" id="scrollWrapper">
         <div class="warehouse-layout">
             <div class="left-side-container" id="leftLinesContainer"></div>
+            
             <div class="center-column">
+                <div class="break-room">
+                    <div style="font-size: 1.2rem;">☕</div>
+                    <div style="font-weight: 800; font-size: 0.8rem; color: #a5b4fc;">PAUSEROM</div>
+                </div>
                 <div class="lager-mitte">📦 LAGER MIDT</div>
             </div>
+            
             <div class="right-side-container" id="rightLinesContainer"></div>
         </div>
     </div>
 
     <script>
         const warehouseStructure = {
-            leftGroup: [/* ... deine Daten ... */],
+            leftGroup: [
+                /* Hier deine linken Spalten falls benötigt */
+            ],
             rightGroup: [
                 { id: 23, uid: "23", name: "(R) 23", cities: ["Hønefoss"], bottomLine: { id: 24, uid: "24", name: "(R) 24", isSpecial: true, cities: ["Skeidar, Ålesund"] } },
                 { id: 25, uid: "25", name: "(R) 25", cities: ["Raufoss"] },
@@ -86,7 +207,7 @@
             warehouseStructure.rightGroup.forEach(i => {
                 const col = document.createElement('div');
                 col.className = 'line-column ' + getSlotClass(i);
-                if (i.bottomLine) col.style.gridRow = "span 2"; // Spalte spannt über 2 Reihen
+                if (i.bottomLine) col.style.gridRow = "span 2"; 
                 
                 col.appendChild(createCard(i));
                 if(i.bottomLine) col.appendChild(createCard(i.bottomLine));

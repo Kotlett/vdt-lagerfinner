@@ -63,7 +63,7 @@
         .line-column.split-bottom-special { justify-content: space-between; height: 100%; }
         .line-column.split-bottom-special > .line-card:last-child { margin-top: auto; }
 
-        /* Gezielter Abstand nur für einzelne Karten via Array */
+        /* Gezielter Abstand via Array */
         .line-card.push-down-card { margin-top: 200px; }
 
         .center-column { display: flex; flex-direction: column; gap: 12px; width: 180px; flex-shrink: 0; }
@@ -159,29 +159,29 @@
                 { id: 25, uid: "25", name: "(H) Linje 25", cities: ["Raufoss"] },
                 { id: 26, uid: "26", name: "(H) Linje 26", cities: ["Gjøvik", "Gran", "Dokka", "Lena", "Harestua"] },    
                 { id: 27, uid: "27", name: "(H) Linje 27", cities: ["Kongsvinger", "Årnes", "Skarnes"] },
-                { id: 28, uid: "33", name: "(H) Linje 33", cities: ["Sauda, Bremnes"], splitBelow: true, bottomLine: { id: 29, uid: "28", name: "(H) Linje 28", cities: ["Elverum", "Trysil"] } },
-                { id: 30, uid: "34", name: "(H) Linje 34", cities: ["Åkrehamn, Kopervik"], splitBelow: true, bottomLine: { id: 31, uid: "29", name: "(H) Linje 29", cities: ["Hamar", "Furnes", "Brumunddal"] } },
-                { id: 32, uid: "35", name: "(H) Linje 35", cities: ["Haugesund Terminal", "Stord", "Fitjar"], splitBelow: true, bottomLine: { id: 33, uid: "30", name: "(H) Linje 30", cities: ["Jessheim", "Dal", "Eidsvoll"] } },
-                { id: 34, uid: "36", name: "(H) Linje 36", cities: ["Bohus Vikse, Haugesund"], splitBelow: true, bottomLine: { id: 35, uid: "31", name: "(H) Linje 31", cities: ["Lillehammer", "Otta / Sørfron", "Åndalsnes"] } },
-                { id: 36, uid: "37", name: "(H) Linje 37", cities: ["Møbelringen Math Lande, Haugesund"], splitBelow: true, bottomLine: { id: 37, uid: "32", name: "(H) Linje 32", cities: ["Slettvoll Oslo"] } },
+                { id: 28, uid: "28", name: "(H) Linje 28", cities: ["Sauda, Bremnes"], splitBelow: true, bottomLine: { id: 29, uid: "29", name: "(H) Linje 29", cities: ["Elverum", "Trysil"] } },
+                { id: 30, uid: "30", name: "(H) Linje 30", cities: ["Åkrehamn, Kopervik"], splitBelow: true, bottomLine: { id: 31, uid: "31", name: "(H) Linje 31", cities: ["Hamar", "Furnes", "Brumunddal"] } },
+                { id: 32, uid: "32", name: "(H) Linje 32", cities: ["Haugesund Terminal", "Stord", "Fitjar"], splitBelow: true, bottomLine: { id: 33, uid: "33", name: "(H) Linje 33", cities: ["Jessheim", "Dal", "Eidsvoll"] } },
+                { id: 34, uid: "34", name: "(H) Linje 34", cities: ["Bohus Vikse, Haugesund"], splitBelow: true, bottomLine: { id: 35, uid: "35", name: "(H) Linje 35", cities: ["Lillehammer", "Otta / Sørfron", "Åndalsnes"] } },
+                { id: 36, uid: "36", name: "(H) Linje 36", cities: ["Møbelringen Math Lande, Haugesund"], splitBelow: true, bottomLine: { id: 37, uid: "37", name: "(H) Linje 37", cities: ["Slettvoll Oslo"] } },
                 { id: 38, uid: "38", name: "(H) Linje 38", cities: ["Haugesund, Skeidar"], splitBelow: true, bottomLine: { id: 39, uid: "39", name: "(H) Linje 39", cities: ["Slettvoll In-Design, Fine Møbler Haugesund"] } },
                 { id: 40, uid: "40", name: "(H) Linje 40", cities: ["Ølen, Etne"], splitBelow: true, bottomLine: { id: 41, uid: "41", name: "(H) Linje 41", cities: ["Flekkefjord", "Egersund", "Lyngdal", "Mandal"] } },
                 { id: 42, uid: "42", name: "(H) Linje 42", cities: ["Bryne", "Kleppe"], splitBelow: true, bottomLine: { id: 43, uid: "43", name: "(H) Linje 43", isSpecial: true, cities: ["Ulsteinvik", "Hareid", "Fosnavåg"] } },
                 { id: 44, uid: "44", name: "(H) Linje 44", cities: ["Stavanger Terminal", "Haukaas", "Jørpeland", "Slettvoll"], splitBelow: true, bottomLine: { id: 45, uid: "45", name: "(H) Linje 45", isSpecial: true, cities: ["Hovdebygda", "Ørsta", "Volda"] } },
                 { id: 46, uid: "46", name: "(H) Linje 46", cities: ["Stavanger", "Skeidar Tvedtsenter", "Skeidar Forus", "Fagmøbler Forus"] },
                 { id: 47, uid: "47", name: "(H) Linje 47", cities: ["Sandnes"] },
-                { id: 48, uid: "48", name: "(H) Linje 48", cities: ["Straume", "Godvik"], splitBelow: true, bottomLine: { id: 49, uid: "62", name: "(H) Linje 62", isSpecial: true, cities: ["Førde", "Florø", "Sandane", "Nordfjordeid", "Stryn", "Leirvik i Sogn", "Byastad"] } },
-                { id: 50, uid: "49", name: "(H) Linje 49", cities: ["Fyllingsdalen", "Kleppestø", "Strusshamn"] },
-                { id: 51, uid: "50", name: "(H) Linje 50", cities: ["Slettvoll Nyborg", "Ulset"] },
-                { id: 52, uid: "51", name: "(H) Linje 51", cities: ["Isdalstø Front", "Rådal 2 Bak"], splitBelow: true, bottomLine: { id: 53, uid: "52", name: "(H) Linje 52", isSpecial: true, cities: ["Mosjøen", "Mo i Rana", "Sandnessjøen", "Brønnøysund", "Fauske", "Harstad", "Bardu", "Finnsnes", "Tromsø", "Bodø", "Lofoten"] } },
-                { id: 54, uid: "53", name: "(H) Linje 53", cities: ["Rådal", "Nesstun", "Kokstad", "Blomsterdalen", "Paradis"] },
-                { id: 55, uid: "54", name: "(H) Linje 54", cities: ["Sogndal", "Kaupanger", "Øvre Årdal", "Voss", "Øystese"] },
-                { id: 56, uid: "55", name: "(H) Linje 55", cities: ["Namsos", "Spillum", "Kolvereid", "Steinkjær"] },
-                { id: 57, uid: "56", name: "(H) Linje 56", cities: ["Stjørdal", "Verdal", "Levanger"] },
-                { id: 58, uid: "57", name: "(H) Linje 57", cities: ["Møbelringen Lade", "Bohus Bo Møbler", "Bohus Tynset"] },
-                { id: 59, uid: "58", name: "(H) Linje 58", cities: ["Skeidar, Trondheim", "Tiller", "Orkanger", "Slettvoll Berge"] },
+                { id: 48, uid: "48", name: "(H) Linje 48", cities: ["Straume", "Godvik"], splitBelow: true, bottomLine: { id: 49, uid: "49", name: "(H) Linje 49", isSpecial: true, cities: ["Førde", "Florø", "Sandane", "Nordfjordeid", "Stryn", "Leirvik i Sogn", "Byastad"] } },
+                { id: 50, uid: "50", name: "(H) Linje 50", cities: ["Fyllingsdalen", "Kleppestø", "Strusshamn"] },
+                { id: 51, uid: "51", name: "(H) Linje 51", cities: ["Slettvoll Nyborg", "Ulset"] },
+                { id: 52, uid: "52", name: "(H) Linje 52", cities: ["Isdalstø Front", "Rådal 2 Bak"], splitBelow: true, bottomLine: { id: 53, uid: "53", name: "(H) Linje 53", isSpecial: true, cities: ["Mosjøen", "Mo i Rana", "Sandnessjøen", "Brønnøysund", "Fauske", "Harstad", "Bardu", "Finnsnes", "Tromsø", "Bodø", "Lofoten"] } },
+                { id: 54, uid: "54", name: "(H) Linje 54", cities: ["Rådal", "Nesstun", "Kokstad", "Blomsterdalen", "Paradis"] },
+                { id: 55, uid: "55", name: "(H) Linje 55", cities: ["Sogndal", "Kaupanger", "Øvre Årdal", "Voss", "Øystese"] },
+                { id: 56, uid: "56", name: "(H) Linje 56", cities: ["Namsos", "Spillum", "Kolvereid", "Steinkjær"] },
+                { id: 57, uid: "57", name: "(H) Linje 57", cities: ["Stjørdal", "Verdal", "Levanger"] },
+                { id: 58, uid: "58", name: "(H) Linje 58", cities: ["Møbelringen Lade", "Bohus Bo Møbler", "Bohus Tynset"] },
+                { id: 59, uid: "59", name: "(H) Linje 59", cities: ["Skeidar, Trondheim", "Tiller", "Orkanger", "Slettvoll Berge"] },
                 { id: 60, uid: "60", name: "(H) Linje 60", cities: ["Terminal Trøndelag", "Hitra", "Røros", "Brekstad", "Åfjord", "Kyrkjeseterøyra"] },
-                { id: 61, uid: "59", name: "(H) Linje 59", cities: ["Orkanger", "Surnadal", "Sunndalsøra", "Oppdal", "Leinstrand"], splitBelow: true, bottomLine: { id: 62, uid: "61", name: "(H) Linje 61", isSpecial: true, cities: ["Finnmark", "Sortland", "Bardufoss", "Lofoten", "Sandnessjøen", "Brønnøysund"] } }
+                { id: 61, uid: "61", name: "(H) Linje 61", cities: ["Orkanger", "Surnadal", "Sunndalsøra", "Oppdal", "Leinstrand"], splitBelow: true, bottomLine: { id: 62, uid: "62", name: "(H) Linje 62", isSpecial: true, cities: ["Finnmark", "Sortland", "Bardufoss", "Lofoten", "Sandnessjøen", "Brønnøysund"] } }
             ]
         };
 
@@ -193,7 +193,7 @@
             card.id = `line-card-${item.id}`;
             
             // ==========================================
-            // HIER DIE IDs DER BLÖCKE EINTRAGEN, DIE 250px NACH UNTEN SOLLEN:
+            // HIER DIE IDs DER BLÖCKE EINTRAGEN, DIE 200px NACH UNTEN SOLLEN:
             // ==========================================
             const pushDownCardIds = [23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 39, 41];
             

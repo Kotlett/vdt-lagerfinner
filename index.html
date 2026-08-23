@@ -62,7 +62,9 @@
         .line-column.split-below-middle { justify-content: flex-start; }
         .line-column.split-bottom-special { justify-content: space-between; height: 100%; }
         .line-column.split-bottom-special > .line-card:last-child { margin-top: auto; }
-        .line-column.push-down { margin-top: 250px; }
+
+        /* Gezielter Abstand nur für einzelne untere Karten */
+        .line-card.push-down-card { margin-top: 250px; }
 
         .center-column { display: flex; flex-direction: column; gap: 12px; width: 180px; flex-shrink: 0; }
         .break-room { background-color: var(--break-bg); border: 2px dashed var(--break-border); border-radius: 10px; padding: 10px; flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 70px; }
@@ -185,10 +187,18 @@
 
         function normalizeText(t) { return t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[æøå]/g, m => ({'æ':'a','ø':'o','å':'a'}[m])); }
 
-        function createCard(item) {
+        function createCard(item, isBottomCard = false) {
             const card = document.createElement('div');
             card.className = `line-card ${item.isSpecial ? 'special-card' : ''}`;
             card.id = `line-card-${item.id}`;
+            
+            // Hier legen wir fest, welche konkreten ID-Blöcke nach unten verschoben werden sollen
+            // Z.B. der untere Teil von Linje 23 (ID 24) sowie die eigenständigen Blöcke 25, 26, 27
+            const pushDownCardIds = [24, 25, 26, 27];
+            if (pushDownCardIds.includes(item.id)) {
+                card.classList.add('push-down-card');
+            }
+
             card.innerHTML = `<span class="card-uid">#${item.uid}</span><div class="line-header"><div class="line-number">${item.name}</div></div><div class="city-list"></div>`;
             const list = card.querySelector('.city-list');
             item.cities.forEach(c => {
@@ -204,13 +214,11 @@
         function render() {
             const left = document.getElementById('leftLinesContainer');
             const right = document.getElementById('rightLinesContainer');
-            const targetIds = [23, 25, 26, 27];
             
             function buildGroup(group, target) {
                 group.forEach(i => {
                     const col = document.createElement('div');
                     const hasSpecial = i.isSpecial || (i.bottomLine && i.bottomLine.isSpecial);
-                    const isTargetColumn = targetIds.includes(i.id) || (i.bottomLine && targetIds.includes(i.bottomLine.id));
                     
                     if (i.splitBelow) {
                         col.className = hasSpecial ? 'line-column split-bottom-special' : 'line-column split-below-middle';
@@ -218,12 +226,10 @@
                         col.className = 'line-column';
                     }
 
-                    if (isTargetColumn) {
-                        col.classList.add('push-down');
+                    col.appendChild(createCard(i, false));
+                    if(i.bottomLine) {
+                        col.appendChild(createCard(i.bottomLine, true));
                     }
-
-                    col.appendChild(createCard(i));
-                    if(i.bottomLine) col.appendChild(createCard(i.bottomLine));
                     target.appendChild(col);
                 });
             }

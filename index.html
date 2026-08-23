@@ -63,9 +63,10 @@
         .line-column.split-bottom-special { justify-content: space-between; height: 100%; }
         .line-column.split-bottom-special > .line-card:last-child { margin-top: auto; }
 
-        /* CSS-Ansatz: Feste Ausrichtung exakt auf Höhe des Pausenraums via Padding/Offset statt relativem Margin */
-        .line-column.push-down-column {
-            padding-top: 200px;
+        /* Unsichtbarer Spacer exakt für Linje 23 (bzw. entsprechende Spalten) */
+        .column-spacer {
+            height: 180px; /* Passe diesen Wert an die gewünschte Höhe an */
+            flex-shrink: 0;
         }
 
         .center-column { display: flex; flex-direction: column; gap: 12px; width: 180px; flex-shrink: 0; }
@@ -209,9 +210,6 @@
             const left = document.getElementById('leftLinesContainer');
             const right = document.getElementById('rightLinesContainer');
             
-            // IDs der Spalten, die exakt auf Höhe des Pausenraums hängen sollen
-            const pushDownColumnIds = [23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 39, 41];
-
             function buildGroup(group, target) {
                 group.forEach(i => {
                     const col = document.createElement('div');
@@ -223,9 +221,11 @@
                         col.className = 'line-column';
                     }
 
-                    // Wende die CSS-Klasse für die exakte Ausrichtung an der Pausenraum-Höhe an
-                    if (pushDownColumnIds.includes(i.id)) {
-                        col.classList.add('push-down-column');
+                    // Gezielter Spacer nur für Spalte 23 (ID 23)
+                    if (i.id === 23) {
+                        const spacer = document.createElement('div');
+                        spacer.className = 'column-spacer';
+                        col.appendChild(spacer);
                     }
 
                     col.appendChild(createCard(i));

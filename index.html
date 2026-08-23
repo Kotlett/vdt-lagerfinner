@@ -284,14 +284,14 @@
             border: 1px solid var(--border-color);
             cursor: pointer;
             overflow: hidden;
-            touch-action: none;
+            touch-action: none; /* Deaktiviert Browser-Gesten auf der Leiste für sofortige Reaktion */
         }
 
         .minimap-center-marker {
             position: absolute;
             top: 0;
             bottom: 0;
-            left: 44%;
+            left: 45%;
             width: 3px;
             background-color: var(--accent);
             opacity: 0.8;
@@ -309,7 +309,7 @@
             border-radius: 9px;
             box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
             cursor: grab;
-            will-change: transform; /* Aktiviert GPU-Hardwarebeschleunigung */
+            will-change: left;
         }
         .minimap-thumb:active {
             cursor: grabbing;
@@ -527,91 +527,53 @@
             
             const availableSpace = minimapWidth - thumbWidth;
             const thumbLeft = scrollPercent * availableSpace;
-            minimapThumb.style.transform = `translate3d(${thumbLeft}px, 0, 0)`;
+            minimapThumb.style.left = `${thumbLeft}px`;
         }
 
         scrollWrapper.addEventListener('scroll', updateMinimap, { passive: true });
         window.addEventListener('resize', updateMinimap);
 
-        // High-Performance Drag & Touch-Logik via requestAnimationFrame
+        // Ultrafast Touch & Drag Logic direkt über die gesamte Minimap
         let isDragging = false;
-        let startX = 0;
-        let startScrollLeft = 0;
-        let rafId = null;
 
-        function startDrag(clientX) {
-            isDragging = true;
-            startX = clientX;
-            startScrollLeft = scrollWrapper.scrollLeft;
-            document.body.style.userSelect = 'none';
-        }
-
-        function onDrag(clientX) {
+        function handleMove(clientX) {
             if (!isDragging) return;
-            
-            if (rafId) cancelAnimationFrame(rafId);
-            
-            rafId = requestAnimationFrame(() => {
-                const maxScroll = scrollWrapper.scrollWidth - scrollWrapper.clientWidth;
-                const minimapWidth = minimap.clientWidth;
-                const thumbWidth = minimapThumb.offsetWidth;
-                const availableSpace = minimapWidth - thumbWidth;
-
-                if (availableSpace <= 0) return;
-
-                const deltaX = clientX - startX;
-                const deltaPercent = deltaX / availableSpace;
-                scrollWrapper.scrollLeft = startScrollLeft + (deltaPercent * maxScroll);
-            });
-        }
-
-        function endDrag() {
-            if (isDragging) {
-                isDragging = false;
-                if (rafId) cancelAnimationFrame(rafId);
-                document.body.style.userSelect = '';
-            }
-        }
-
-        // Maus-Events
-        minimapThumb.addEventListener('mousedown', (e) => {
-            e.stopPropagation();
-            startDrag(e.clientX);
-        });
-        window.addEventListener('mousemove', (e) => onDrag(e.clientX));
-        window.addEventListener('mouseup', endDrag);
-
-        // Touch-Events (Handy, optimiert)
-        minimapThumb.addEventListener('touchstart', (e) => {
-            e.stopPropagation();
-            startDrag(e.touches[0].clientX);
-        }, { passive: true });
-
-        window.addEventListener('touchmove', (e) => {
-            if (isDragging) {
-                onDrag(e.touches[0].clientX);
-            }
-        }, { passive: true });
-
-        window.addEventListener('touchend', endDrag);
-
-        // Klick in die Minimap
-        minimap.addEventListener('click', (e) => {
-            if (e.target === minimapThumb) return;
             const rect = minimap.getBoundingClientRect();
-            const clickX = e.clientX - rect.left;
             const thumbWidth = minimapThumb.offsetWidth;
-            const minimapWidth = rect.width;
-            const availableSpace = minimapWidth - thumbWidth;
-            
+            const availableSpace = rect.width - thumbWidth;
+
             if (availableSpace <= 0) return;
 
-            let targetThumbLeft = clickX - (thumbWidth / 2);
-            targetThumbLeft = Math.max(0, Math.min(targetThumbLeft, availableSpace));
-            
-            const clickPercent = targetThumbLeft / availableSpace;
+            let touchX = clientX - rect.left - (thumbWidth / 2);
+            touchX = Math.max(0, Math.min(touchX, availableSpace));
+
+            const percent = touchX / availableSpace;
             const maxScroll = scrollWrapper.scrollWidth - scrollWrapper.clientWidth;
-            scrollWrapper.scrollTo({ left: clickPercent * maxScroll, behavior: 'smooth' });
+            
+            // Direktes Setzen ohne Animation-Frame Verzögerung
+            scrollWrapper.scrollLeft = percent * maxScroll;
+            minimapThumb.style.left = `${touchX}px`;
+        }
+
+        minimap.addEventListener('pointerdown', (e) => {
+            isDragging = true;
+            minimap.setPointerCapture(e.pointerId);
+            handleMove(e.clientX);
+        });
+
+        minimap.addEventListener('pointermove', (e) => {
+            if (isDragging) {
+                handleMove(e.clientX);
+            }
+        });
+
+        minimap.addEventListener('pointerup', (e) => {
+            isDragging = false;
+            try { minimap.releasePointerCapture(e.pointerId); } catch(err) {}
+        });
+
+        minimap.addEventListener('pointercancel', (e) => {
+            isDragging = false;
         });
 
         let lastSearchQuery = "";

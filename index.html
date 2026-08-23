@@ -63,8 +63,10 @@
         .line-column.split-bottom-special { justify-content: space-between; height: 100%; }
         .line-column.split-bottom-special > .line-card:last-child { margin-top: auto; }
 
-        /* Gezielter Abstand via Array */
-        .line-card.push-down-card { margin-top: 200px; }
+        /* CSS-Ansatz: Feste Ausrichtung exakt auf Höhe des Pausenraums via Padding/Offset statt relativem Margin */
+        .line-column.push-down-column {
+            padding-top: 200px;
+        }
 
         .center-column { display: flex; flex-direction: column; gap: 12px; width: 180px; flex-shrink: 0; }
         .break-room { background-color: var(--break-bg); border: 2px dashed var(--break-border); border-radius: 10px; padding: 10px; flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 70px; }
@@ -191,16 +193,6 @@
             const card = document.createElement('div');
             card.className = `line-card ${item.isSpecial ? 'special-card' : ''}`;
             card.id = `line-card-${item.id}`;
-            
-            // ==========================================
-            // HIER DIE IDs DER BLÖCKE EINTRAGEN, DIE 200px NACH UNTEN SOLLEN:
-            // ==========================================
-            const pushDownCardIds = [23, 24, 25, 26, 27, 29];
-            
-            if (pushDownCardIds.includes(item.id)) {
-                card.classList.add('push-down-card');
-            }
-
             card.innerHTML = `<span class="card-uid">#${item.uid}</span><div class="line-header"><div class="line-number">${item.name}</div></div><div class="city-list"></div>`;
             const list = card.querySelector('.city-list');
             item.cities.forEach(c => {
@@ -217,6 +209,9 @@
             const left = document.getElementById('leftLinesContainer');
             const right = document.getElementById('rightLinesContainer');
             
+            // IDs der Spalten, die exakt auf Höhe des Pausenraums hängen sollen
+            const pushDownColumnIds = [23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 39, 41];
+
             function buildGroup(group, target) {
                 group.forEach(i => {
                     const col = document.createElement('div');
@@ -226,6 +221,11 @@
                         col.className = hasSpecial ? 'line-column split-bottom-special' : 'line-column split-below-middle';
                     } else {
                         col.className = 'line-column';
+                    }
+
+                    // Wende die CSS-Klasse für die exakte Ausrichtung an der Pausenraum-Höhe an
+                    if (pushDownColumnIds.includes(i.id)) {
+                        col.classList.add('push-down-column');
                     }
 
                     col.appendChild(createCard(i));

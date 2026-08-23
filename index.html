@@ -284,6 +284,7 @@
             border: 1px solid var(--border-color);
             cursor: pointer;
             overflow: hidden;
+            touch-action: none; /* Wichtig für flüssiges Ziehen auf Touchscreens */
         }
 
         .minimap-center-marker {
@@ -296,6 +297,7 @@
             opacity: 0.8;
             transform: translateX(-50%);
             z-index: 2;
+            pointer-events: none;
         }
 
         .minimap-thumb {
@@ -303,11 +305,13 @@
             top: 2px;
             bottom: 2px;
             left: 0;
-            /* Breite wird dynamisch per JS gesetzt (min. 50px) */
             background: linear-gradient(90deg, #38bdf8, #22c55e);
             border-radius: 9px;
             box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
-            transition: transform 0.05s linear;
+            cursor: grab;
+        }
+        .minimap-thumb:active {
+            cursor: grabbing;
         }
     </style>
 </head>
@@ -514,15 +518,12 @@
             if (maxScroll <= 0) return;
             
             const scrollPercent = scrollWrapper.scrollLeft / maxScroll;
-            
-            // Berechne die Daumen-Breite mit einer Mindestbreite von 50px
             const minimapWidth = minimap.clientWidth;
             const calculatedWidth = (scrollWrapper.clientWidth / scrollWrapper.scrollWidth) * minimapWidth;
-            const thumbWidth = Math.max(calculatedWidth, 50); // Mindestens 50px breit
+            const thumbWidth = Math.max(calculatedWidth, 50);
             
             minimapThumb.style.width = `${thumbWidth}px`;
             
-            // Verfügbarer Weg für den Daumen innerhalb der Minimap
             const availableSpace = minimapWidth - thumbWidth;
             minimapThumb.style.transform = `translateX(${scrollPercent * availableSpace}px)`;
         }
@@ -530,10 +531,76 @@
         scrollWrapper.addEventListener('scroll', updateMinimap);
         window.addEventListener('resize', updateMinimap);
 
+        // Drag & Touch-Funktionalität für den Minimap-Balken
+        let isDragging = false;
+        let startX = 0;
+        let startScrollLeft = 0;
+
+        function startDrag(clientX) {
+            isDragging = true;
+            startX = clientX;
+            startScrollLeft = scrollWrapper.scrollLeft;
+            document.body.style.userSelect = 'none';
+        }
+
+        function onDrag(clientX) {
+            if (!isDragging) return;
+            const maxScroll = scrollWrapper.scrollWidth - scrollWrapper.clientWidth;
+            const minimapWidth = minimap.clientWidth;
+            const thumbWidth = minimapThumb.offsetWidth;
+            const availableSpace = minimapWidth - thumbWidth;
+
+            if (availableSpace <= 0) return;
+
+            const deltaX = clientX - startX;
+            const deltaPercent = deltaX / availableSpace;
+            scrollWrapper.scrollLeft = startScrollLeft + (deltaPercent * maxScroll);
+        }
+
+        function endDrag() {
+            if (isDragging) {
+                isDragging = false;
+                document.body.style.userSelect = '';
+            }
+        }
+
+        // Maus-Events
+        minimapThumb.addEventListener('mousedown', (e) => {
+            e.stopPropagation();
+            startDrag(e.clientX);
+        });
+        window.addEventListener('mousemove', (e) => onDrag(e.clientX));
+        window.addEventListener('mouseup', endDrag);
+
+        // Touch-Events (Handy)
+        minimapThumb.addEventListener('touchstart', (e) => {
+            e.stopPropagation();
+            startDrag(e.touches[0].clientX);
+        }, { passive: true });
+
+        window.addEventListener('touchmove', (e) => {
+            if (isDragging) {
+                onDrag(e.touches[0].clientX);
+            }
+        }, { passive: true });
+
+        window.addEventListener('touchend', endDrag);
+
+        // Klick in die Minimap (außerhalb des Daumens) springt direkt dorthin
         minimap.addEventListener('click', (e) => {
+            if (e.target === minimapThumb) return;
             const rect = minimap.getBoundingClientRect();
             const clickX = e.clientX - rect.left;
-            const clickPercent = clickX / rect.width;
+            const thumbWidth = minimapThumb.offsetWidth;
+            const minimapWidth = rect.width;
+            const availableSpace = minimapWidth - thumbWidth;
+            
+            if (availableSpace <= 0) return;
+
+            let targetThumbLeft = clickX - (thumbWidth / 2);
+            targetThumbLeft = Math.max(0, Math.min(targetThumbLeft, availableSpace));
+            
+            const clickPercent = targetThumbLeft / availableSpace;
             const maxScroll = scrollWrapper.scrollWidth - scrollWrapper.clientWidth;
             scrollWrapper.scrollTo({ left: clickPercent * maxScroll, behavior: 'smooth' });
         });

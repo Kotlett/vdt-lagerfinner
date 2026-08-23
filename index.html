@@ -34,7 +34,8 @@
         }
 
         header { max-width: 1400px; margin: 0 auto 16px auto; width: 100%; text-align: center; }
-        h1 { font-size: 1.5rem; font-weight: 700; margin-bottom: 4px; }
+        h1 { font-size: 1.5rem; font-weight: 700; margin-bottom: 2px; }
+        .update-date { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; opacity: 0.7; }
         .subtitle { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 16px; }
 
         .search-container { max-width: 600px; margin: 0 auto 20px auto; width: 100%; position: sticky; top: 12px; z-index: 100; }
@@ -90,6 +91,7 @@
 
     <header>
         <h1>Lagerfinner</h1>
+        <div class="update-date">Oppdatert: 23.08.2026</div>
         <p class="subtitle">Skriv inn stedsnavn og trykk Enter for å søke / hoppe til neste resultat.</p>
     </header>
 
@@ -288,7 +290,6 @@
                 currentMatchIndex = (currentMatchIndex + 1) % matchCards.length;
             }
 
-            // Oppdater treff-melding (viser kun når man har skrevet minst 2 tegn)
             if (val.length >= 2) {
                 if (matchCards.length > 0) {
                     const treffTekst = matchCards.length === 1 ? "1 treff" : `${matchCards.length} treff`;

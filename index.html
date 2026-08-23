@@ -23,6 +23,8 @@
             --top-border: #60a5fa;
             --left-std-bg: #1e293b;
             --left-std-border: #3b82f6;
+            --danger: #ef4444;
+            --danger-hover: #dc2626;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -31,10 +33,41 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-main);
-            padding: 16px 16px 70px 16px; /* Platz unten für die Minimap */
+            padding: 16px 16px 70px 16px;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            position: relative;
+        }
+
+        /* Feedback Button Oben Rechts */
+        .feedback-btn {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background-color: var(--danger);
+            color: #ffffff;
+            border: none;
+            border-radius: 10px;
+            padding: 8px 14px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+            transition: all 0.2s ease;
+            z-index: 200;
+            text-decoration: none;
+        }
+        .feedback-btn:hover {
+            background-color: var(--danger-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(239, 68, 68, 0.6);
+        }
+        .feedback-btn .icon {
+            font-size: 1.1rem;
         }
 
         header { max-width: 1400px; margin: 16px auto 6px auto; width: 100%; text-align: center; }
@@ -44,37 +77,6 @@
 
         .search-container { max-width: 650px; margin: 0 auto 12px auto; width: 100%; position: sticky; top: 12px; z-index: 100; }
         
-        .search-wrapper-outer {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            width: 100%;
-        }
-
-        /* Dezent schwebender Zentrier-Button links */
-        .center-view-btn {
-            background: none;
-            border: none;
-            color: var(--accent);
-            font-size: 1.3rem;
-            font-weight: 800;
-            letter-spacing: -1px;
-            cursor: pointer;
-            width: 40px;
-            height: 52px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            transition: color 0.2s ease, transform 0.2s ease;
-            opacity: 0.85;
-        }
-        .center-view-btn:hover {
-            color: #ffffff;
-            opacity: 1;
-            transform: scale(1.05);
-        }
-
         .search-box { position: relative; width: 100%; display: flex; align-items: center; }
         
         #searchInput { 
@@ -252,6 +254,10 @@
             font-weight: 700;
         }
 
+        .minimap-labels span:nth-child(2) {
+            transform: translateX(-16%);
+        }
+
         .warehouse-minimap {
             position: relative;
             height: 14px;
@@ -266,10 +272,10 @@
             position: absolute;
             top: 0;
             bottom: 0;
-            left: 50%;
+            left: 42%;
             width: 2px;
             background-color: var(--accent);
-            opacity: 0.5;
+            opacity: 0.6;
             transform: translateX(-50%);
         }
 
@@ -288,6 +294,11 @@
 </head>
 <body>
 
+    <!-- Melde-Button oben rechts -->
+    <a href="mailto:sebastianpott23@gmail.com?subject=Endring%20lagerfinder" class="feedback-btn" title="Meld inn endring eller feil">
+        <span class="icon">📫</span> Meld fra om feil
+    </a>
+
     <header>
         <h1>Lagerfinner</h1>
         <div class="update-date">Oppdatert: 23.08.2026</div>
@@ -295,13 +306,10 @@
     </header>
 
     <div class="search-container">
-        <div class="search-wrapper-outer">
-            <button id="centerViewBtn" class="center-view-btn" title="Gå til midten av lageret">>|<</button>
-            <div class="search-box">
-                <button id="clearBtn" class="clear-btn" title="Nullstill søk">✕</button>
-                <input type="text" id="searchInput" placeholder="Søk etter sted..." autofocus autocomplete="off">
-                <button id="searchBtn" class="search-btn" title="Søk / Neste resultat">➔</button>
-            </div>
+        <div class="search-box">
+            <button id="clearBtn" class="clear-btn" title="Nullstill søk">✕</button>
+            <input type="text" id="searchInput" placeholder="Søk etter sted..." autofocus autocomplete="off">
+            <button id="searchBtn" class="search-btn" title="Søk / Neste resultat">➔</button>
         </div>
         <div id="searchResultsInfo" class="search-results-info"></div>
     </div>
@@ -314,7 +322,6 @@
         </div>
     </div>
 
-    <!-- Fixierte Minimap unten am Bildschirmrand -->
     <div class="warehouse-minimap-container">
         <div class="minimap-wrapper">
             <div class="minimap-labels">
@@ -479,7 +486,6 @@
             scrollWrapper.scrollTo({ left: targetLeft, behavior: behavior });
         }
 
-        // Minimap Logik
         const scrollWrapper = document.getElementById('scrollWrapper');
         const minimap = document.getElementById('minimap');
         const minimapThumb = document.getElementById('minimapThumb');
@@ -499,7 +505,6 @@
         scrollWrapper.addEventListener('scroll', updateMinimap);
         window.addEventListener('resize', updateMinimap);
 
-        // Klick auf Minimap springt an die entsprechende Stelle
         minimap.addEventListener('click', (e) => {
             const rect = minimap.getBoundingClientRect();
             const clickX = e.clientX - rect.left;
@@ -515,7 +520,6 @@
         const searchInput = document.getElementById('searchInput');
         const clearBtn = document.getElementById('clearBtn');
         const searchBtn = document.getElementById('searchBtn');
-        const centerViewBtn = document.getElementById('centerViewBtn');
         const searchResultsInfo = document.getElementById('searchResultsInfo');
 
         function performSearch(queryText) {
@@ -583,10 +587,6 @@
         searchInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') performSearch(e.target.value); });
         searchBtn.addEventListener('click', () => performSearch(searchInput.value));
         clearBtn.addEventListener('click', () => { searchInput.value = ""; performSearch(""); searchInput.focus(); });
-        
-        centerViewBtn.addEventListener('click', () => {
-            centerOnElement(document.getElementById('centerColumn'), 'smooth');
-        });
 
         render();
     </script>

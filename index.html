@@ -63,9 +63,10 @@
         .line-column.split-bottom-special { justify-content: space-between; height: 100%; }
         .line-column.split-bottom-special > .line-card:last-child { margin-top: auto; }
 
-        /* Spezielle Versatz-Klasse für Linje 23 und Linje 29 (+100px unterhalb des Pausenraum-Starts) */
-        .line-column.offset-custom {
-            padding-top: 170px; /* Pausenraum-Mindesthöhe (70px) + 100px gewünschter Abstand */
+        /* Spezifische Spalten-IDs mit relativem Versatz */
+        #col-29, #col-31, #col-33 {
+            position: relative;
+            margin-top: 75px;
         }
 
         .center-column { display: flex; flex-direction: column; gap: 12px; width: 180px; flex-shrink: 0; }
@@ -214,16 +215,12 @@
                     const col = document.createElement('div');
                     const hasSpecial = i.isSpecial || (i.bottomLine && i.bottomLine.isSpecial);
                     
-                    // Prüfen ob es sich um ID 23 oder ID 29 handelt, um die Versatz-Klasse zu setzen
-                    let baseClass = 'line-column';
-                    if (i.id === 23 || i.id === 29) {
-                        baseClass += ' offset-custom';
-                    }
+                    col.id = `col-${i.id}`;
 
                     if (i.splitBelow) {
-                        col.className = `${baseClass} ${hasSpecial ? 'split-bottom-special' : 'split-below-middle'}`;
+                        col.className = `line-column ${hasSpecial ? 'split-bottom-special' : 'split-below-middle'}`;
                     } else {
-                        col.className = baseClass;
+                        col.className = 'line-column';
                     }
 
                     col.appendChild(createCard(i));

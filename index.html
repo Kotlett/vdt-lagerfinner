@@ -63,10 +63,9 @@
         .line-column.split-bottom-special { justify-content: space-between; height: 100%; }
         .line-column.split-bottom-special > .line-card:last-child { margin-top: auto; }
 
-        /* Unsichtbarer Spacer exakt für Linje 23 (bzw. entsprechende Spalten) */
-        .column-spacer {
-            height: 180px; /* Passe diesen Wert an die gewünschte Höhe an */
-            flex-shrink: 0;
+        /* Spezielle Versatz-Klasse für Linje 23 und Linje 29 (+100px unterhalb des Pausenraum-Starts) */
+        .line-column.offset-custom {
+            padding-top: 170px; /* Pausenraum-Mindesthöhe (70px) + 100px gewünschter Abstand */
         }
 
         .center-column { display: flex; flex-direction: column; gap: 12px; width: 180px; flex-shrink: 0; }
@@ -215,17 +214,16 @@
                     const col = document.createElement('div');
                     const hasSpecial = i.isSpecial || (i.bottomLine && i.bottomLine.isSpecial);
                     
-                    if (i.splitBelow) {
-                        col.className = hasSpecial ? 'line-column split-bottom-special' : 'line-column split-below-middle';
-                    } else {
-                        col.className = 'line-column';
+                    // Prüfen ob es sich um ID 23 oder ID 29 handelt, um die Versatz-Klasse zu setzen
+                    let baseClass = 'line-column';
+                    if (i.id === 23 || i.id === 29) {
+                        baseClass += ' offset-custom';
                     }
 
-                    // Gezielter Spacer nur für Spalte 23 (ID 23)
-                    if (i.id === 23) {
-                        const spacer = document.createElement('div');
-                        spacer.className = 'column-spacer';
-                        col.appendChild(spacer);
+                    if (i.splitBelow) {
+                        col.className = `${baseClass} ${hasSpecial ? 'split-bottom-special' : 'split-below-middle'}`;
+                    } else {
+                        col.className = baseClass;
                     }
 
                     col.appendChild(createCard(i));

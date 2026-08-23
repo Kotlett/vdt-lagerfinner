@@ -21,8 +21,8 @@
             --middle-border: #0284c7;
             --top-bg: #1d4ed8;
             --top-border: #60a5fa;
-            --left-std-bg: #1e293b; /* Standard Panel */
-            --left-std-border: #3b82f6; /* Leicht angepasstes, frischeres Blau für 1-21 */
+            --left-std-bg: #1e293b;
+            --left-std-border: #3b82f6;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -46,7 +46,7 @@
         .search-box { position: relative; width: 100%; display: flex; align-items: center; }
         #searchInput { width: 100%; padding: 16px 55px 16px 50px; font-size: 1.25rem; font-weight: 600; border: 2px solid var(--accent); border-radius: 12px; background-color: var(--panel-bg); color: #ffffff; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5); outline: none; }
         #searchInput:focus { border-color: var(--highlight); box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.25); }
-        
+       
         .clear-btn { position: absolute; left: 16px; background: none; border: none; color: var(--text-muted); font-size: 1.3rem; cursor: pointer; padding: 4px; display: none; align-items: center; justify-content: center; z-index: 5; width: 30px; height: 30px; }
         .clear-btn:hover { color: #ffffff; }
 
@@ -58,13 +58,13 @@
         .search-results-info.zero { color: #ef4444; }
 
         .warehouse-scroll-wrapper { width: 100%; overflow-x: auto; padding-bottom: 16px; scroll-behavior: smooth; }
-        
-        .warehouse-layout { 
-            display: flex; 
-            flex-direction: column; 
-            gap: 16px; 
-            min-width: max-content; 
-            align-items: center; 
+       
+        .warehouse-layout {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            min-width: max-content;
+            align-items: center;
         }
 
         .warehouse-row {
@@ -76,83 +76,80 @@
         }
 
         #rowMiddle {
-            margin-top: -150px;
+            margin-top: -175px;
             position: relative;
             z-index: 5;
         }
 
         #rowBottom {
             align-items: flex-end;
-            margin-top: -500px;
+            margin-top: -400px;
             position: relative;
             z-index: 10;
         }
 
-        .line-column, .slot-column { 
-            display: flex; 
-            flex-direction: column; 
-            gap: 12px; 
-            width: 170px; 
-            flex-shrink: 0; 
+        .line-column, .slot-column {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 170px;
+            flex-shrink: 0;
         }
 
-        .center-column { display: flex; flex-direction: column; gap: 12px; width: 180px; flex-shrink: 0; height:350px; }
-        
-        /* Pauserom mit fixer Höhe von 150px */
-        .break-room { 
-            background-color: var(--break-bg); 
-            border: 2px dashed var(--break-border); 
-            border-radius: 10px; 
-            padding: 12px; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: center; 
-            text-align: center; 
-            height: 150px; 
+        .center-column { display: flex; flex-direction: column; gap: 12px; width: 180px; flex-shrink: 0; height: 350px; }
+       
+        .break-room {
+            background-color: var(--break-bg);
+            border: 2px dashed var(--break-border);
+            border-radius: 10px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            height: 150px;
         }
         .break-room .icon { font-size: 1.3rem; margin-bottom: 2px; }
         .break-room .title { font-weight: 800; font-size: 0.85rem; color: #a5b4fc; }
 
-        /* Lager Mitte: Höhe + 50px */
-        .lager-mitte { 
-            background-color: var(--middle-bg); 
-            border: 2px solid var(--middle-border); 
-            border-radius: 10px; 
-            padding: 16px; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: center; 
-            text-align: center; 
-            box-shadow: inset 0 0 15px rgba(0,0,0,0.3); 
-            height: calc(100% + 50px); 
-            min-height: 200px; 
+        .lager-mitte {
+            background-color: var(--middle-bg);
+            border: 2px solid var(--middle-border);
+            border-radius: 10px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.3);
+            height: calc(100% + 50px);
+            min-height: 200px;
         }
         .lager-mitte .icon { font-size: 2rem; margin-bottom: 6px; }
         .lager-mitte .title { font-weight: 800; font-size: 1rem; color: #7dd3fc; letter-spacing: 1px; }
-        
+       
         .line-card { background-color: var(--panel-bg); border: 2px solid var(--border-color); border-radius: 10px; padding: 12px; width: 100%; display: flex; flex-direction: column; transition: all 0.25s ease; position: relative; height: auto; }
-        
-        /* Spezielles Design für Linien 1-21 (Linke Standard-Karten) */
+       
         .line-card.left-std-card {
             border-color: var(--left-std-border);
-            background-color: #172554; /* Sanfter, dunkler Blauton als Grundfläche */
+            background-color: #172554;
         }
 
         .card-uid { position: absolute; top: 4px; left: 8px; font-size: 0.6rem; color: var(--text-muted); opacity: 0.5; }
         .special-card { border-color: var(--special-border) !important; background-color: #2a1b18; }
         .top-card { border-color: var(--top-border) !important; background-color: #112240; }
-        
+       
         .line-header { background-color: var(--card-bg); border-radius: 6px; padding: 8px; text-align: center; margin-top: 8px; margin-bottom: 10px; border-bottom: 3px solid var(--accent); }
         .left-std-card .line-header { background-color: #1e3a8a; border-bottom-color: var(--accent); }
         .special-card .line-header { border-bottom-color: var(--special-border) !important; }
         .top-card .line-header { border-bottom-color: var(--top-border) !important; }
-        
+       
         .line-number { font-size: 1rem; font-weight: 800; color: var(--accent); }
         .special-card .line-number { color: var(--special-border); }
         .top-card .line-number { color: var(--top-border); }
-        
+       
         .city-list { display: flex; flex-direction: column; gap: 6px; }
         .city-item { background-color: rgba(255, 255, 255, 0.05); padding: 6px 8px; border-radius: 6px; font-size: 0.85rem; color: #e2e8f0; }
         .line-card.active { border-color: var(--highlight) !important; background-color: #064e3b !important; transform: translateY(-4px); box-shadow: 0 10px 20px -5px rgba(34, 197, 94, 0.4); }
@@ -179,13 +176,8 @@
 
     <div class="warehouse-scroll-wrapper" id="scrollWrapper">
         <div class="warehouse-layout">
-            <!-- Zeile 1: Pauserom, Linke Seite (alle Standardboxen), Rechte Seite (Top-Boxen) -->
             <div class="warehouse-row" id="rowTop"></div>
-
-            <!-- Zeile 2: Lager Mitte (Zentrum), Rechte Seite (Middle-Boxen) -->
             <div class="warehouse-row" id="rowMiddle"></div>
-
-            <!-- Zeile 3: Rechte Seite & Linke Seite Specials (Bottom-Boxen / Specials) -->
             <div class="warehouse-row" id="rowBottom"></div>
         </div>
     </div>
@@ -227,22 +219,22 @@
                 { top: { id: 36, uid: "36", name: "(H) Linje 36", isTop: true, cities: ["Møbelringen Math Lande, Haugesund"] }, middle: { id: 37, uid: "37", name: "(H) Linje 37", cities: ["Slettvoll Oslo"] }, bottom: null },
                 { top: { id: 38, uid: "38", name: "(H) Linje 38", isTop: true, cities: ["Haugesund, Skeidar"] }, middle: { id: 39, uid: "39", name: "(H) Linje 39", cities: ["Slettvoll In-Design, Fine Møbler Haugesund"] }, bottom: null },
                 { top: { id: 40, uid: "40", name: "(H) Linje 40", isTop: true, cities: ["Ølen, Etne"] }, middle: { id: 41, uid: "41", name: "(H) Linje 41", cities: ["Flekkefjord", "Egersund", "Lyngdal", "Mandal"] }, bottom: null },
-                { top: { id: 42, uid: "42", name: "(H) Linje 42", isTop: true, cities: ["Stavanger", "Skeidar Tvedtsenter", "Skeidar Forus", "Fagmøbler Forus"] }, middle: null, bottom: { id: 43, uid: "43", name: "(H) Linje 43", isSpecial: true, cities: ["Ulsteinvik", "Hareid", "Fosnavåg"] } },
-                { top: { id: 44, uid: "44", name: "(H) Linje 44", isTop: true, cities: ["Sandnes"] }, middle: null, bottom: { id: 45, uid: "45", name: "(H) Linje 45", isSpecial: true, cities: ["Hovdebygda", "Ørsta", "Volda"] } },
-                { top: { id: 46, uid: "46", name: "(H) Linje 46", isTop: true, cities: ["Straume", "Godvik"] }, middle: null, bottom: null },
-                { top: { id: 47, uid: "47", name: "(H) Linje 47", isTop: true, cities: ["Fyllingsdalen", "Kleppestø", "Strusshamn"] }, middle: null, bottom: null },
-                { top: { id: 48, uid: "48", name: "(H) Linje 48", isTop: true, cities: ["Slettvoll Nyborg", "Ulset"] }, middle: null, bottom: { id: 49, uid: "49", name: "(H) Linje 49", isSpecial: true, cities: ["Førde", "Florø", "Sandane", "Nordfjordeid", "Stryn", "Leirvik i Sogn", "Byastad"] } },
-                { top: { id: 50, uid: "50", name: "(H) Linje 50", isTop: true, cities: ["Isdalstø Front", "Rådal 2 Bak"] }, middle: null, bottom: null },
-                { top: { id: 51, uid: "51", name: "(H) Linje 51", isTop: true, cities: ["Rådal", "Nesstun", "Kokstad", "Blomsterdalen", "Paradis"] }, middle: null, bottom: null },
-                { top: { id: 52, uid: "52", name: "(H) Linje 52", isTop: true, cities: ["Sogndal", "Kaupanger", "Øvre Årdal", "Voss", "Øystese"] }, middle: null, bottom: { id: 53, uid: "53", name: "(H) Linje 53", isSpecial: true, cities: ["Mosjøen", "Mo i Rana", "Sandnessjøen", "Brønnøysund", "Fauske", "Harstad", "Bardu", "Finnsnes", "Tromsø", "Bodø", "Lofoten"] } },
-                { top: { id: 54, uid: "54", name: "(H) Linje 54", isTop: true, cities: ["Namsos", "Spillum", "Kolvereid", "Steinkjær"] }, middle: null, bottom: null },
-                { top: { id: 55, uid: "55", name: "(H) Linje 55", isTop: true, cities: ["Stjørdal", "Verdal", "Levanger"] }, middle: null, bottom: null },
-                { top: { id: 56, uid: "56", name: "(H) Linje 56", isTop: true, cities: ["Møbelringen Lade", "Bohus Bo Møbler", "Bohus Tynset"] }, middle: null, bottom: null },
-                { top: { id: 57, uid: "57", name: "(H) Linje 57", isTop: true, cities: ["Skeidar, Trondheim", "Tiller", "Orkanger", "Slettvoll Berge"] }, middle: null, bottom: null },
-                { top: { id: 58, uid: "58", name: "(H) Linje 58", isTop: true, cities: ["Terminal Trøndelag", "Hitra", "Røros", "Brekstad", "Åfjord", "Kyrkjeseterøyra"] }, middle: null, bottom: null },
-                { top: { id: 59, uid: "59", name: "(H) Linje 59", isTop: true, cities: ["Orkanger", "Surnadal", "Sunndalsøra", "Oppdal", "Leinstrand"] }, middle: null, bottom: null },
-                { top: { id: 60, uid: "60", name: "(H) Linje 60", isTop: true, cities: ["Finnmark", "Sortland", "Bardufoss", "Lofoten", "Sandnessjøen", "Brønnøysund"] }, middle: null, bottom: null },
-                { top: { id: 61, uid: "61", name: "(H) Linje 61", isTop: true, cities: ["Ekstra / Diverse"] }, middle: null, bottom: { id: 62, uid: "62", name: "(H) Linje 62", isSpecial: true, cities: ["Ekstra Spesiell"] } }
+                { top: { id: 42, uid: "42", name: "(H) Linje 42", isTop: true, cities: ["Bryne, Kleppe"] }, middle: null, bottom: { id: 43, uid: "43", name: "(H) Linje 43", isSpecial: true, cities: ["Ulsteinvik", "Hareid", "Fosnavåg"] } },
+                { top: { id: 44, uid: "44", name: "(H) Linje 44", isTop: true, cities: ["Stavanger Terminal", "Haukaas", "Jørpeland", "Slettvoll"] }, middle: null, bottom: { id: 45, uid: "45", name: "(H) Linje 45", isSpecial: true, cities: ["Hovdebygda", "Ørsta", "Volda"] } },
+                { top: { id: 46, uid: "46", name: "(H) Linje 46", isTop: true, cities: ["Stavanger", "Skeidar Tvedtsenter", "Skeidar Forus", "Fagmøbler Forus"] }, middle: null, bottom: null },
+                { top: { id: 47, uid: "47", name: "(H) Linje 47", isTop: true, cities: ["Sandnes"] }, middle: null, bottom: null },
+                { top: { id: 48, uid: "48", name: "(H) Linje 48", isTop: true, cities: ["Straume", "Godvik"] }, middle: null, bottom: { id: 49, uid: "49", name: "(H) Linje 49", isSpecial: true, cities: ["Førde", "Florø", "Sandane", "Nordfjordeid", "Stryn", "Leirvik i Sogn", "Byastad"] } },
+                { top: { id: 50, uid: "50", name: "(H) Linje 50", isTop: true, cities: ["Fyllingsdalen", "Kleppestø", "Strusshamn"] }, middle: null, bottom: null },
+                { top: { id: 51, uid: "51", name: "(H) Linje 51", isTop: true, cities: ["Slettvoll Nyborg", "Ulset"] }, middle: null, bottom: null },
+                { top: { id: 52, uid: "52", name: "(H) Linje 52", isTop: true, cities: ["Isdalstø Front", "Rådal 2 Bak"] }, middle: null, bottom: { id: 53, uid: "53", name: "(H) Linje 53", isSpecial: true, cities: ["Mosjøen", "Mo i Rana", "Sandnessjøen", "Brønnøysund", "Fauske", "Harstad", "Bardu", "Finnsnes", "Tromsø", "Bodø", "Lofoten"] } },
+                { top: { id: 54, uid: "54", name: "(H) Linje 54", isTop: true, cities: ["Rådal", "Nesstun", "Kokstad", "Blomsterdalen", "Paradis"] }, middle: null, bottom: null },
+                { top: { id: 55, uid: "55", name: "(H) Linje 55", isTop: true, cities: ["Sogndal", "Kaupanger", "Øvre Årdal", "Voss", "Øystese"] }, middle: null, bottom: null },
+                { top: { id: 56, uid: "56", name: "(H) Linje 56", isTop: true, cities: ["Namsos", "Spillum", "Kolvereid", "Steinkjær"] }, middle: null, bottom: null },
+                { top: { id: 57, uid: "57", name: "(H) Linje 57", isTop: true, cities: ["Stjørdal", "Verdal", "Levanger"] }, middle: null, bottom: null },
+                { top: { id: 58, uid: "58", name: "(H) Linje 58", isTop: true, cities: ["Møbelringen Lade", "Bohus Bo Møbler", "Bohus Tynset"] }, middle: null, bottom: null },
+                { top: { id: 59, uid: "59", name: "(H) Linje 59", isTop: true, cities: ["Skeidar, Trondheim", "Tiller", "Orkanger", "Slettvoll Berge"] }, middle: null, bottom: null },
+                { top: { id: 60, uid: "60", name: "(H) Linje 60", isTop: true, cities: ["Terminal Trøndelag", "Hitra", "Røros", "Brekstad", "Åfjord", "Kyrkjeseterøyra"] }, middle: null, bottom: null },
+                { top: { id: 61, uid: "61", name: "(H) Linje 61", isTop: true, cities: ["Orkanger", "Surnadal", "Sunndalsøra", "Oppdal", "Leinstrand"] }, middle: null, bottom: { id: 62, uid: "62", name: "(H) Linje 62", isSpecial: true, cities: ["Finnmark", "Sortland", "Bardufoss", "Lofoten", "Sandnessjøen", "Brønnøysund"] } }
             ]
         };
 
@@ -269,7 +261,6 @@
             const rowMiddle = document.getElementById('rowMiddle');
             const rowBottom = document.getElementById('rowBottom');
 
-            // 1. Linke Seite: Standardboxen in Zeile 1, Specials (Linie 22) in Zeile 3
             warehouseStructure.leftGroup.forEach(i => {
                 const slotTop = document.createElement('div');
                 slotTop.className = 'line-column';
@@ -289,7 +280,6 @@
                 rowBottom.appendChild(slotBot);
             });
 
-            // 2. Center Column: Pauserom in Zeile 1, Lager Mitte exklusiv in Zeile 2
             const centerTop = document.createElement('div');
             centerTop.className = 'center-column';
             const breakRoom = document.createElement('div');
@@ -311,7 +301,6 @@
             centerBot.className = 'slot-column';
             rowBottom.appendChild(centerBot);
 
-            // 3. Rechte Seite: Top in Zeile 1, Middle in Zeile 2, Bottom/Specials in Zeile 3
             warehouseStructure.rightGroup.forEach((group) => {
                 const slotTop = document.createElement('div');
                 slotTop.className = 'slot-column';
@@ -353,7 +342,7 @@
         function performSearch(queryText) {
             const val = normalizeText(queryText.trim());
             const allCards = document.querySelectorAll('.line-card');
-            
+           
             clearBtn.style.display = queryText.length > 0 ? 'flex' : 'none';
 
             if (val === "") {
@@ -377,13 +366,13 @@
                 allCards.forEach(card => {
                     const items = card.querySelectorAll('.city-item');
                     let match = false;
-                    
+                   
                     items.forEach(el => {
                         const isMatch = val.length >= 2 && el.getAttribute('data-city-norm').includes(val);
                         el.classList.toggle('match', isMatch);
                         if(isMatch) match = true;
                     });
-                    
+                   
                     card.classList.toggle('active', val.length >= 2 && match);
                     card.classList.toggle('dimmed', val.length >= 2 && !match);
 

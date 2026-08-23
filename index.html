@@ -31,18 +31,18 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-main);
-            padding: 16px;
+            padding: 16px 16px 70px 16px; /* Platz unten für die Minimap */
             display: flex;
             flex-direction: column;
             min-height: 100vh;
         }
 
-        header { max-width: 1400px; margin: 24px auto 6px auto; width: 100%; text-align: center; }
+        header { max-width: 1400px; margin: 16px auto 6px auto; width: 100%; text-align: center; }
         h1 { font-size: 1.5rem; font-weight: 700; margin-bottom: 2px; }
         .update-date { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; opacity: 0.7; }
         .subtitle { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 4px; }
 
-        .search-container { max-width: 650px; margin: 0 auto 16px auto; width: 100%; position: sticky; top: 12px; z-index: 100; }
+        .search-container { max-width: 650px; margin: 0 auto 12px auto; width: 100%; position: sticky; top: 12px; z-index: 100; }
         
         .search-wrapper-outer {
             display: flex;
@@ -79,8 +79,8 @@
         
         #searchInput { 
             width: 100%; 
-            padding: 16px 55px 16px 50px; 
-            font-size: 1.25rem; 
+            padding: 14px 55px 14px 50px; 
+            font-size: 1.15rem; 
             font-weight: 600; 
             border: 2px solid var(--accent); 
             border-radius: 12px; 
@@ -112,7 +112,7 @@
         .search-btn { position: absolute; right: 16px; background: none; border: none; color: var(--accent); font-size: 1.4rem; cursor: pointer; padding: 4px; display: flex; align-items: center; justify-content: center; z-index: 5; width: 30px; height: 30px; }
         .search-btn:hover { color: var(--highlight); }
 
-        .search-results-info { font-size: 0.85rem; font-weight: 600; text-align: center; margin-top: 6px; min-height: 20px; }
+        .search-results-info { font-size: 0.85rem; font-weight: 600; text-align: center; margin-top: 4px; min-height: 18px; }
         .search-results-info.success { color: var(--highlight); }
         .search-results-info.zero { color: #ef4444; }
 
@@ -219,6 +219,71 @@
         .line-card.active { border-color: var(--highlight) !important; background-color: #064e3b !important; transform: translateY(-4px); box-shadow: 0 10px 20px -5px rgba(34, 197, 94, 0.4); }
         .city-item.match { background-color: var(--highlight); color: #ffffff; font-weight: 700; }
         .line-card.dimmed { opacity: 0.25; filter: grayscale(80%); }
+
+        /* Minimap / Positionsbalken unten */
+        .warehouse-minimap-container {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(15, 23, 42, 0.92);
+            backdrop-filter: blur(8px);
+            border-top: 1px solid var(--border-color);
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .minimap-wrapper {
+            max-width: 500px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .minimap-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            font-weight: 700;
+        }
+
+        .warehouse-minimap {
+            position: relative;
+            height: 14px;
+            background-color: #1e293b;
+            border-radius: 7px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .minimap-center-marker {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 2px;
+            background-color: var(--accent);
+            opacity: 0.5;
+            transform: translateX(-50%);
+        }
+
+        .minimap-thumb {
+            position: absolute;
+            top: 2px;
+            bottom: 2px;
+            left: 0;
+            width: 25%;
+            background: linear-gradient(90deg, #38bdf8, #22c55e);
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+            transition: transform 0.05s linear;
+        }
     </style>
 </head>
 <body>
@@ -242,10 +307,25 @@
     </div>
 
     <div class="warehouse-scroll-wrapper" id="scrollWrapper">
-        <div class="warehouse-layout">
+        <div class="warehouse-layout" id="warehouseLayout">
             <div class="warehouse-row" id="rowTop"></div>
             <div class="warehouse-row" id="rowMiddle"></div>
             <div class="warehouse-row" id="rowBottom"></div>
+        </div>
+    </div>
+
+    <!-- Fixierte Minimap unten am Bildschirmrand -->
+    <div class="warehouse-minimap-container">
+        <div class="minimap-wrapper">
+            <div class="minimap-labels">
+                <span>◀ Venstre (1-22)</span>
+                <span style="color: var(--accent);">Lager Midt</span>
+                <span>Høyre (23-62) ▶</span>
+            </div>
+            <div class="warehouse-minimap" id="minimap">
+                <div class="minimap-center-marker"></div>
+                <div class="minimap-thumb" id="minimapThumb"></div>
+            </div>
         </div>
     </div>
 
@@ -388,6 +468,7 @@
 
             setTimeout(() => {
                 centerOnElement(document.getElementById('centerColumn'), 'auto');
+                updateMinimap();
             }, 100);
         }
 
@@ -397,6 +478,35 @@
             const targetLeft = el.offsetLeft - (scrollWrapper.clientWidth / 2) + (el.clientWidth / 2);
             scrollWrapper.scrollTo({ left: targetLeft, behavior: behavior });
         }
+
+        // Minimap Logik
+        const scrollWrapper = document.getElementById('scrollWrapper');
+        const minimap = document.getElementById('minimap');
+        const minimapThumb = document.getElementById('minimapThumb');
+
+        function updateMinimap() {
+            const maxScroll = scrollWrapper.scrollWidth - scrollWrapper.clientWidth;
+            if (maxScroll <= 0) return;
+            
+            const scrollPercent = scrollWrapper.scrollLeft / maxScroll;
+            const thumbWidthPercent = (scrollWrapper.clientWidth / scrollWrapper.scrollWidth) * 100;
+            const availableWidth = minimap.clientWidth - (minimap.clientWidth * (thumbWidthPercent / 100));
+            
+            minimapThumb.style.width = `${thumbWidthPercent}%`;
+            minimapThumb.style.transform = `translateX(${scrollPercent * availableWidth}px)`;
+        }
+
+        scrollWrapper.addEventListener('scroll', updateMinimap);
+        window.addEventListener('resize', updateMinimap);
+
+        // Klick auf Minimap springt an die entsprechende Stelle
+        minimap.addEventListener('click', (e) => {
+            const rect = minimap.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const clickPercent = clickX / rect.width;
+            const maxScroll = scrollWrapper.scrollWidth - scrollWrapper.clientWidth;
+            scrollWrapper.scrollTo({ left: clickPercent * maxScroll, behavior: 'smooth' });
+        });
 
         let lastSearchQuery = "";
         let matchCards = [];

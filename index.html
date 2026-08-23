@@ -131,7 +131,7 @@
         .search-results-info.success { color: var(--highlight); }
         .search-results-info.zero { color: #ef4444; }
 
-        .warehouse-scroll-wrapper { width: 100%; overflow-x: auto; padding-bottom: 16px; scroll-behavior: smooth; }
+        .warehouse-scroll-wrapper { width: 100%; overflow-x: auto; padding-bottom: 16px; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
         
         .warehouse-layout {
             display: flex;
@@ -284,7 +284,7 @@
             border: 1px solid var(--border-color);
             cursor: pointer;
             overflow: hidden;
-            touch-action: none; /* Wichtig für flüssiges Ziehen auf Touchscreens */
+            touch-action: none;
         }
 
         .minimap-center-marker {
@@ -309,6 +309,7 @@
             border-radius: 9px;
             box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
             cursor: grab;
+            will-change: transform; /* Aktiviert GPU-Hardwarebeschleunigung */
         }
         .minimap-thumb:active {
             cursor: grabbing;
@@ -525,16 +526,18 @@
             minimapThumb.style.width = `${thumbWidth}px`;
             
             const availableSpace = minimapWidth - thumbWidth;
-            minimapThumb.style.transform = `translateX(${scrollPercent * availableSpace}px)`;
+            const thumbLeft = scrollPercent * availableSpace;
+            minimapThumb.style.transform = `translate3d(${thumbLeft}px, 0, 0)`;
         }
 
-        scrollWrapper.addEventListener('scroll', updateMinimap);
+        scrollWrapper.addEventListener('scroll', updateMinimap, { passive: true });
         window.addEventListener('resize', updateMinimap);
 
-        // Drag & Touch-Funktionalität für den Minimap-Balken
+        // High-Performance Drag & Touch-Logik via requestAnimationFrame
         let isDragging = false;
         let startX = 0;
         let startScrollLeft = 0;
+        let rafId = null;
 
         function startDrag(clientX) {
             isDragging = true;
@@ -545,21 +548,27 @@
 
         function onDrag(clientX) {
             if (!isDragging) return;
-            const maxScroll = scrollWrapper.scrollWidth - scrollWrapper.clientWidth;
-            const minimapWidth = minimap.clientWidth;
-            const thumbWidth = minimapThumb.offsetWidth;
-            const availableSpace = minimapWidth - thumbWidth;
+            
+            if (rafId) cancelAnimationFrame(rafId);
+            
+            rafId = requestAnimationFrame(() => {
+                const maxScroll = scrollWrapper.scrollWidth - scrollWrapper.clientWidth;
+                const minimapWidth = minimap.clientWidth;
+                const thumbWidth = minimapThumb.offsetWidth;
+                const availableSpace = minimapWidth - thumbWidth;
 
-            if (availableSpace <= 0) return;
+                if (availableSpace <= 0) return;
 
-            const deltaX = clientX - startX;
-            const deltaPercent = deltaX / availableSpace;
-            scrollWrapper.scrollLeft = startScrollLeft + (deltaPercent * maxScroll);
+                const deltaX = clientX - startX;
+                const deltaPercent = deltaX / availableSpace;
+                scrollWrapper.scrollLeft = startScrollLeft + (deltaPercent * maxScroll);
+            });
         }
 
         function endDrag() {
             if (isDragging) {
                 isDragging = false;
+                if (rafId) cancelAnimationFrame(rafId);
                 document.body.style.userSelect = '';
             }
         }
@@ -572,7 +581,7 @@
         window.addEventListener('mousemove', (e) => onDrag(e.clientX));
         window.addEventListener('mouseup', endDrag);
 
-        // Touch-Events (Handy)
+        // Touch-Events (Handy, optimiert)
         minimapThumb.addEventListener('touchstart', (e) => {
             e.stopPropagation();
             startDrag(e.touches[0].clientX);
@@ -586,7 +595,7 @@
 
         window.addEventListener('touchend', endDrag);
 
-        // Klick in die Minimap (außerhalb des Daumens) springt direkt dorthin
+        // Klick in die Minimap
         minimap.addEventListener('click', (e) => {
             if (e.target === minimapThumb) return;
             const rect = minimap.getBoundingClientRect();

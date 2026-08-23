@@ -75,7 +75,7 @@
             margin: 4px auto 8px auto; 
             width: 100%; 
             text-align: left; 
-            padding-right: 130px; /* Platzhalter für den Button rechts */
+            padding-right: 130px; 
         }
         h1 { font-size: 1.4rem; font-weight: 700; margin-bottom: 1px; }
         .update-date { font-size: 0.7rem; color: var(--text-muted); opacity: 0.7; }
@@ -241,10 +241,10 @@
             bottom: 0;
             left: 0;
             width: 100%;
-            background: rgba(15, 23, 42, 0.92);
+            background: rgba(15, 23, 42, 0.95);
             backdrop-filter: blur(8px);
             border-top: 1px solid var(--border-color);
-            padding: 8px 16px;
+            padding: 12px 16px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -256,26 +256,31 @@
             width: 100%;
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 6px;
+            position: relative;
         }
 
         .minimap-labels {
             display: flex;
             justify-content: space-between;
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             color: var(--text-muted);
             font-weight: 700;
+            position: relative;
+            height: 14px;
         }
 
         .minimap-labels span:nth-child(2) {
-            transform: translateX(-16%);
+            position: absolute;
+            left: 44%;
+            transform: translateX(-50%);
         }
 
         .warehouse-minimap {
             position: relative;
-            height: 14px;
+            height: 22px;
             background-color: #1e293b;
-            border-radius: 7px;
+            border-radius: 11px;
             border: 1px solid var(--border-color);
             cursor: pointer;
             overflow: hidden;
@@ -285,11 +290,12 @@
             position: absolute;
             top: 0;
             bottom: 0;
-            left: 50%; /* Geändert von 42% auf 50% (kann bei Bedarf leicht angepasst werden) */
-            width: 2px;
+            left: 44%;
+            width: 3px;
             background-color: var(--accent);
-            opacity: 0.6;
+            opacity: 0.8;
             transform: translateX(-50%);
+            z-index: 2;
         }
 
         .minimap-thumb {
@@ -297,10 +303,9 @@
             top: 2px;
             bottom: 2px;
             left: 0;
-            min-width: 50px;
-            width: 25%;
+            /* Breite wird dynamisch per JS gesetzt (min. 50px) */
             background: linear-gradient(90deg, #38bdf8, #22c55e);
-            border-radius: 5px;
+            border-radius: 9px;
             box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
             transition: transform 0.05s linear;
         }
@@ -509,11 +514,17 @@
             if (maxScroll <= 0) return;
             
             const scrollPercent = scrollWrapper.scrollLeft / maxScroll;
-            const thumbWidthPercent = (scrollWrapper.clientWidth / scrollWrapper.scrollWidth) * 100;
-            const availableWidth = minimap.clientWidth - (minimap.clientWidth * (thumbWidthPercent / 100));
             
-            minimapThumb.style.width = `${thumbWidthPercent}%`;
-            minimapThumb.style.transform = `translateX(${scrollPercent * availableWidth}px)`;
+            // Berechne die Daumen-Breite mit einer Mindestbreite von 50px
+            const minimapWidth = minimap.clientWidth;
+            const calculatedWidth = (scrollWrapper.clientWidth / scrollWrapper.scrollWidth) * minimapWidth;
+            const thumbWidth = Math.max(calculatedWidth, 50); // Mindestens 50px breit
+            
+            minimapThumb.style.width = `${thumbWidth}px`;
+            
+            // Verfügbarer Weg für den Daumen innerhalb der Minimap
+            const availableSpace = minimapWidth - thumbWidth;
+            minimapThumb.style.transform = `translateX(${scrollPercent * availableSpace}px)`;
         }
 
         scrollWrapper.addEventListener('scroll', updateMinimap);

@@ -46,7 +46,7 @@
         .search-box { position: relative; width: 100%; display: flex; align-items: center; }
         #searchInput { width: 100%; padding: 16px 55px 16px 50px; font-size: 1.25rem; font-weight: 600; border: 2px solid var(--accent); border-radius: 12px; background-color: var(--panel-bg); color: #ffffff; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5); outline: none; }
         #searchInput:focus { border-color: var(--highlight); box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.25); }
-       
+        
         .clear-btn { position: absolute; left: 16px; background: none; border: none; color: var(--text-muted); font-size: 1.3rem; cursor: pointer; padding: 4px; display: none; align-items: center; justify-content: center; z-index: 5; width: 30px; height: 30px; }
         .clear-btn:hover { color: #ffffff; }
 
@@ -58,7 +58,7 @@
         .search-results-info.zero { color: #ef4444; }
 
         .warehouse-scroll-wrapper { width: 100%; overflow-x: auto; padding-bottom: 16px; scroll-behavior: smooth; }
-       
+        
         .warehouse-layout {
             display: flex;
             flex-direction: column;
@@ -97,7 +97,13 @@
         }
 
         .center-column { display: flex; flex-direction: column; gap: 12px; width: 180px; flex-shrink: 0; height: 350px; }
-       
+        
+        /* Spezifische Anpassung für die erweiterte Leerspalte unten (180px + 5px) */
+        #centerBotColumn {
+            width: 185px !important;
+            flex-shrink: 0;
+        }
+        
         .break-room {
             background-color: var(--break-bg);
             border: 2px dashed var(--break-border);
@@ -129,9 +135,9 @@
         }
         .lager-mitte .icon { font-size: 2rem; margin-bottom: 6px; }
         .lager-mitte .title { font-weight: 800; font-size: 1rem; color: #7dd3fc; letter-spacing: 1px; }
-       
+        
         .line-card { background-color: var(--panel-bg); border: 2px solid var(--border-color); border-radius: 10px; padding: 12px; width: 100%; display: flex; flex-direction: column; transition: all 0.25s ease; position: relative; height: auto; }
-       
+        
         .line-card.left-std-card {
             border-color: var(--left-std-border);
             background-color: #172554;
@@ -140,16 +146,16 @@
         .card-uid { position: absolute; top: 4px; left: 8px; font-size: 0.6rem; color: var(--text-muted); opacity: 0.5; }
         .special-card { border-color: var(--special-border) !important; background-color: #2a1b18; }
         .top-card { border-color: var(--top-border) !important; background-color: #112240; }
-       
+        
         .line-header { background-color: var(--card-bg); border-radius: 6px; padding: 8px; text-align: center; margin-top: 8px; margin-bottom: 10px; border-bottom: 3px solid var(--accent); }
         .left-std-card .line-header { background-color: #1e3a8a; border-bottom-color: var(--accent); }
         .special-card .line-header { border-bottom-color: var(--special-border) !important; }
         .top-card .line-header { border-bottom-color: var(--top-border) !important; }
-       
+        
         .line-number { font-size: 1rem; font-weight: 800; color: var(--accent); }
         .special-card .line-number { color: var(--special-border); }
         .top-card .line-number { color: var(--top-border); }
-       
+        
         .city-list { display: flex; flex-direction: column; gap: 6px; }
         .city-item { background-color: rgba(255, 255, 255, 0.05); padding: 6px 8px; border-radius: 6px; font-size: 0.85rem; color: #e2e8f0; }
         .line-card.active { border-color: var(--highlight) !important; background-color: #064e3b !important; transform: translateY(-4px); box-shadow: 0 10px 20px -5px rgba(34, 197, 94, 0.4); }
@@ -299,6 +305,7 @@
 
             const centerBot = document.createElement('div');
             centerBot.className = 'slot-column';
+            centerBot.id = 'centerBotColumn';
             rowBottom.appendChild(centerBot);
 
             warehouseStructure.rightGroup.forEach((group) => {

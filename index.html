@@ -63,7 +63,7 @@
         .line-column.split-bottom-special { justify-content: space-between; height: 100%; }
         .line-column.split-bottom-special > .line-card:last-child { margin-top: auto; }
 
-        /* Gezielter Abstand nur für einzelne untere Karten */
+        /* Gezielter Abstand nur für einzelne Karten via Array */
         .line-card.push-down-card { margin-top: 250px; }
 
         .center-column { display: flex; flex-direction: column; gap: 12px; width: 180px; flex-shrink: 0; }
@@ -187,14 +187,16 @@
 
         function normalizeText(t) { return t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[æøå]/g, m => ({'æ':'a','ø':'o','å':'a'}[m])); }
 
-        function createCard(item, isBottomCard = false) {
+        function createCard(item) {
             const card = document.createElement('div');
             card.className = `line-card ${item.isSpecial ? 'special-card' : ''}`;
             card.id = `line-card-${item.id}`;
             
-            // Hier legen wir fest, welche konkreten ID-Blöcke nach unten verschoben werden sollen
-            // Z.B. der untere Teil von Linje 23 (ID 24) sowie die eigenständigen Blöcke 25, 26, 27
+            // ==========================================
+            // HIER DIE IDs DER BLÖCKE EINTRAGEN, DIE 250px NACH UNTEN SOLLEN:
+            // ==========================================
             const pushDownCardIds = [24, 25, 26, 27];
+            
             if (pushDownCardIds.includes(item.id)) {
                 card.classList.add('push-down-card');
             }
@@ -226,9 +228,9 @@
                         col.className = 'line-column';
                     }
 
-                    col.appendChild(createCard(i, false));
+                    col.appendChild(createCard(i));
                     if(i.bottomLine) {
-                        col.appendChild(createCard(i.bottomLine, true));
+                        col.appendChild(createCard(i.bottomLine));
                     }
                     target.appendChild(col);
                 });

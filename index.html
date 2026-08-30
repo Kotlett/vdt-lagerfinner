@@ -284,7 +284,7 @@
             border: 1px solid var(--border-color);
             cursor: pointer;
             overflow: hidden;
-            touch-action: none; /* Deaktiviert Browser-Gesten auf der Leiste für sofortige Reaktion */
+            touch-action: none;
         }
 
         .minimap-center-marker {
@@ -325,7 +325,7 @@
 
     <header>
         <h1>Lagerfinner</h1>
-        <div class="update-date">Oppdatert: 23.08.2026</div>
+        <div class="update-date">Oppdatert: 30.08.2026</div>
     </header>
 
     <div class="search-container">
@@ -351,7 +351,7 @@
             <div class="minimap-labels">
                 <span>◀ Venstre (1-22)</span>
                 <span style="color: var(--accent);">Lager Midt</span>
-                <span>Høyre (23-62) ▶</span>
+                <span>Høyre (23-64) ▶</span>
             </div>
             <div class="warehouse-minimap" id="minimap">
                 <div class="minimap-center-marker"></div>
@@ -363,56 +363,58 @@
     <script>
         const warehouseStructure = {
             leftGroup: [
-                { id: 1, uid: "1", name: "(V) Linje 1", isLeftStd: true, cities: ["Malmefjord", "Eide"] },
-                { id: 2, uid: "2", name: "(V) Linje 2", isLeftStd: true, cities: ["Molde", "Vestnes"] },
-                { id: 3, uid: "3", name: "(V) Linje 3", isLeftStd: true, cities: ["Kristiansund"] },
-                { id: 4, uid: "4", name: "(V) Linje 4", isLeftStd: true, cities: ["Kristiansand"] },
-                { id: 5, uid: "5", name: "(V) Linje 5", isLeftStd: true, cities: ["Arendal", "Grimstad", "Kragerø / Fevik", "Sannidal / Risør"] },
-                { id: 6, uid: "6", name: "(V) Linje 6", isLeftStd: true, cities: ["Porsgrunn", "Skien", "Stathelle", "Rjukan"] },
-                { id: 7, uid: "7", name: "(V) Linje 7", isLeftStd: true, cities: ["Sandefjord", "Larvik", "Stavern"] },
-                { id: 8, uid: "8", name: "(V) Linje 8", isLeftStd: true, cities: ["Tønsberg", "Horten", "Holmestrand"] },
-                { id: 9, uid: "9", name: "(V) Linje 9", isLeftStd: true, cities: ["Fredrikstad", "Rolvsøy", "Sarpsborg", "Mysen / Rakkestad", "Berg i Østfold", "Halden"] },
-                { id: 10, uid: "10", name: "(V) Linje 10", isLeftStd: true, cities: ["Vinterbro", "Ski", "Moss", "Langhus", "Drøbak", "Vestby"] },
-                { id: 11, uid: "11", name: "(V) Linje 11", isLeftStd: true, cities: ["Terminal Ramberg", "Bjørkelangen", "Aurskog"] },
-                { id: 12, uid: "12", name: "(V) Linje 12", isLeftStd: true, cities: ["Frogner"] },
-                { id: 13, uid: "13", name: "(V) Linje 13", isLeftStd: true, cities: ["Møbelringen Alna", "Billingstad"] },
-                { id: 14, uid: "14", name: "(V) Linje 14", isLeftStd: true, cities: ["Skeidar (Oslo)", "A-Møbler (Oslo)", "Bohus Alna (Oslo)"] },
-                { id: 15, uid: "15", name: "(V) Linje 15", isLeftStd: true, cities: ["Drammen"] },
-                { id: 16, uid: "16", name: "(V) Linje 16", isLeftStd: true, cities: ["Nesbru"] },
-                { id: 17, uid: "17", name: "(V) Linje 17", isLeftStd: true, cities: ["Notodden", "Mjøndalen", "Kongsberg", "Hokksund"] },
-                { id: 18, uid: "18", name: "(V) Linje 18", isLeftStd: true, cities: ["Lillestrøm", "Skedsmokorset", "Strømmen", "Hagan"] },
-                { id: 19, uid: "19", name: "(V) Linje 19", isLeftStd: true, cities: ["Møbelringen Lørenskog"] },
-                { id: 20, uid: "20", name: "(V) Linje 20", isLeftStd: true, cities: ["Logistikk", "Bohus", "Fetsund"] },
-                { id: 21, uid: "21", name: "(V) Linje 21", isLeftStd: true, cities: ["Leira / Geilo", "Fagernes", "Gol. / Nesbyen", "Røn"], bottomLine: { id: 22, uid: "22", name: "(V) Linje 22", isSpecial: true, cities: ["Ålesund", "Brattvåg / Søvik", "Digernes", "Giske / Valerøy / Vigra", "Hellandshamn", "Åheim"] } }
+                { id: 1, uid: "1", name: "Linje 1", isLeftStd: true, cities: ["Malmefjord", "Eide"] },
+                { id: 2, uid: "2", name: "Linje 2", isLeftStd: true, cities: ["Molde", "Vestnes"] },
+                { id: 3, uid: "3", name: "Linje 3", isLeftStd: true, cities: ["Kristiansund"] },
+                { id: 4, uid: "4", name: "Linje 4", isLeftStd: true, cities: ["Kristiansand"] },
+                { id: 5, uid: "5", name: "Linje 5", isLeftStd: true, cities: ["Arendal", "Grimstad", "Kragerø / Fevik", "Sannidal / Risør"] },
+                { id: 6, uid: "6", name: "Linje 6", isLeftStd: true, cities: ["Porsgrunn", "Skien", "Stathelle", "Rjukan"] },
+                { id: 7, uid: "7", name: "Linje 7", isLeftStd: true, cities: ["Sandefjord", "Larvik", "Stavern"] },
+                { id: 8, uid: "8", name: "Linje 8", isLeftStd: true, cities: ["Tønsberg", "Horten", "Holmestrand"] },
+                { id: 9, uid: "9", name: "Linje 9", isLeftStd: true, cities: ["Fredrikstad", "Rolvsøy", "Sarpsborg", "Mysen / Rakkestad", "Berg i Østfold", "Halden"], bottomLine: { id: 10, uid: "10", name: "Linje 10", isSpecial: true, cities: ["Sverige"] } },
+                { id: 11, uid: "11", name: "Linje 11", isLeftStd: true, cities: ["Vinterbro", "Ski", "Moss", "Langhus", "Drøbak", "Vestby"] },
+                { id: 12, uid: "12", name: "Linje 12", isLeftStd: true, cities: ["Terminal Ramberg", "Bjørkelangen", "Aurskog"] },
+                { id: 13, uid: "13", name: "Linje 13", isLeftStd: true, cities: ["Frogner"] },
+                { id: 14, uid: "14", name: "Linje 14", isLeftStd: true, cities: ["Møbelringen Alna", "Billingstad"] },
+                { id: 15, uid: "15", name: "Linje 15", isLeftStd: true, cities: ["Skeidar (Oslo)", "A-Møbler (Oslo)", "Bohus Alna (Oslo)"] },
+                { id: 16, uid: "16", name: "Linje 16", isLeftStd: true, cities: ["Drammen"] },
+                { id: 17, uid: "17", name: "Linje 17", isLeftStd: true, cities: ["Nesbru"] },
+                { id: 18, uid: "18", name: "Linje 18", isLeftStd: true, cities: ["Notodden", "Mjøndalen", "Kongsberg", "Hokksund"] },
+                { id: 19, uid: "19", name: "Linje 19", isLeftStd: true, cities: ["Lillestrøm", "Skedsmokorset", "Strømmen", "Hagan"] },
+                { id: 20, uid: "20", name: "Linje 20", isLeftStd: true, cities: ["Møbelringen Lørenskog"] },
+                { id: 21, uid: "21", name: "Linje 21", isLeftStd: true, cities: ["Logistikk", "Bohus", "Fetsund"] },
+                { id: 22, uid: "22", name: "Linje 22", isLeftStd: true, cities: ["Leira / Geilo", "Fagernes", "Gol. / Nesbyen", "Røn"], bottomLine: { id: 23, uid: "23", name: "Linje 23", isSpecial: true, cities: ["Ålesund", "Brattvåg / Søvik", "Digernes", "Giske / Valerøy / Vigra", "Hellandshamn", "Åheim"] } }
             ],
             rightGroup: [
-                { top: null, middle: { id: 23, uid: "23", name: "(H) Linje 23", cities: ["Hønefoss"] }, bottom: { id: 24, uid: "24", name: "(H) Linje 24", isSpecial: true, cities: ["Skeidar, Ålesund"] } },
-                { top: null, middle: { id: 25, uid: "25", name: "(H) Linje 25", cities: ["Raufoss"] }, bottom: null },
-                { top: null, middle: { id: 26, uid: "26", name: "(H) Linje 26", cities: ["Gjøvik", "Gran", "Dokka", "Lena", "Harestua"] }, bottom: null },
-                { top: null, middle: { id: 27, uid: "27", name: "(H) Linje 27", cities: ["Kongsvinger", "Årnes", "Skarnes"] }, bottom: null },
-                { top: { id: 28, uid: "28", name: "(H) Linje 28", isTop: true, cities: ["Sauda, Bremnes"] }, middle: { id: 29, uid: "29", name: "(H) Linje 29", cities: ["Elverum", "Trysil"] }, bottom: null },
-                { top: { id: 30, uid: "30", name: "(H) Linje 30", isTop: true, cities: ["Åkrehamn, Kopervik"] }, middle: { id: 31, uid: "31", name: "(H) Linje 31", cities: ["Hamar", "Furnes", "Brumunddal"] }, bottom: null },
-                { top: { id: 32, uid: "32", name: "(H) Linje 32", isTop: true, cities: ["Haugesund Terminal", "Stord", "Fitjar"] }, middle: { id: 33, uid: "33", name: "(H) Linje 33", cities: ["Jessheim", "Dal", "Eidsvoll"] }, bottom: null },
-                { top: { id: 34, uid: "34", name: "(H) Linje 34", isTop: true, cities: ["Bohus Vikse, Haugesund"] }, middle: { id: 35, uid: "35", name: "(H) Linje 35", cities: ["Lillehammer", "Otta / Sørfron", "Åndalsnes"] }, bottom: null },
-                { top: { id: 36, uid: "36", name: "(H) Linje 36", isTop: true, cities: ["Møbelringen Math Lande, Haugesund"] }, middle: { id: 37, uid: "37", name: "(H) Linje 37", cities: ["Slettvoll Oslo"] }, bottom: null },
-                { top: { id: 38, uid: "38", name: "(H) Linje 38", isTop: true, cities: ["Haugesund, Skeidar"] }, middle: { id: 39, uid: "39", name: "(H) Linje 39", cities: ["Slettvoll In-Design, Fine Møbler Haugesund"] }, bottom: null },
-                { top: { id: 40, uid: "40", name: "(H) Linje 40", isTop: true, cities: ["Ølen, Etne"] }, middle: { id: 41, uid: "41", name: "(H) Linje 41", cities: ["Flekkefjord", "Egersund", "Lyngdal", "Mandal"] }, bottom: null },
-                { top: { id: 42, uid: "42", name: "(H) Linje 42", isTop: true, cities: ["Bryne, Kleppe"] }, middle: null, bottom: { id: 43, uid: "43", name: "(H) Linje 43", isSpecial: true, cities: ["Ulsteinvik", "Hareid", "Fosnavåg"] } },
-                { top: { id: 44, uid: "44", name: "(H) Linje 44", isTop: true, cities: ["Stavanger Terminal", "Haukaas", "Jørpeland", "Slettvoll"] }, middle: null, bottom: { id: 45, uid: "45", name: "(H) Linje 45", isSpecial: true, cities: ["Hovdebygda", "Ørsta", "Volda"] } },
-                { top: { id: 46, uid: "46", name: "(H) Linje 46", isTop: true, cities: ["Stavanger", "Skeidar Tvedtsenter", "Skeidar Forus", "Fagmøbler Forus"] }, middle: null, bottom: null },
-                { top: { id: 47, uid: "47", name: "(H) Linje 47", isTop: true, cities: ["Sandnes"] }, middle: null, bottom: null },
-                { top: { id: 48, uid: "48", name: "(H) Linje 48", isTop: true, cities: ["Straume", "Godvik"] }, middle: null, bottom: { id: 49, uid: "49", name: "(H) Linje 49", isSpecial: true, cities: ["Førde", "Florø", "Sandane", "Nordfjordeid", "Stryn", "Leirvik i Sogn", "Byastad"] } },
-                { top: { id: 50, uid: "50", name: "(H) Linje 50", isTop: true, cities: ["Fyllingsdalen", "Kleppestø", "Strusshamn"] }, middle: null, bottom: null },
-                { top: { id: 51, uid: "51", name: "(H) Linje 51", isTop: true, cities: ["Slettvoll Nyborg", "Ulset"] }, middle: null, bottom: null },
-                { top: { id: 52, uid: "52", name: "(H) Linje 52", isTop: true, cities: ["Isdalstø Front", "Rådal 2 Bak"] }, middle: null, bottom: { id: 53, uid: "53", name: "(H) Linje 53", isSpecial: true, cities: ["Mosjøen", "Mo i Rana", "Sandnessjøen", "Brønnøysund", "Fauske", "Harstad", "Bardu", "Finnsnes", "Tromsø", "Bodø", "Lofoten"] } },
-                { top: { id: 54, uid: "54", name: "(H) Linje 54", isTop: true, cities: ["Rådal", "Nesstun", "Kokstad", "Blomsterdalen", "Paradis"] }, middle: null, bottom: null },
-                { top: { id: 55, uid: "55", name: "(H) Linje 55", isTop: true, cities: ["Sogndal", "Kaupanger", "Øvre Årdal", "Voss", "Øystese"] }, middle: null, bottom: null },
-                { top: { id: 56, uid: "56", name: "(H) Linje 56", isTop: true, cities: ["Namsos", "Spillum", "Kolvereid", "Steinkjær"] }, middle: null, bottom: null },
-                { top: { id: 57, uid: "57", name: "(H) Linje 57", isTop: true, cities: ["Stjørdal", "Verdal", "Levanger"] }, middle: null, bottom: null },
-                { top: { id: 58, uid: "58", name: "(H) Linje 58", isTop: true, cities: ["Møbelringen Lade", "Bohus Bo Møbler", "Bohus Tynset"] }, middle: null, bottom: null },
-                { top: { id: 59, uid: "59", name: "(H) Linje 59", isTop: true, cities: ["Skeidar, Trondheim", "Tiller", "Orkanger", "Slettvoll Berge"] }, middle: null, bottom: null },
-                { top: { id: 60, uid: "60", name: "(H) Linje 60", isTop: true, cities: ["Terminal Trøndelag", "Hitra", "Røros", "Brekstad", "Åfjord", "Kyrkjeseterøyra"] }, middle: null, bottom: null },
-                { top: { id: 61, uid: "61", name: "(H) Linje 61", isTop: true, cities: ["Orkanger", "Surnadal", "Sunndalsøra", "Oppdal", "Leinstrand"] }, middle: null, bottom: { id: 62, uid: "62", name: "(H) Linje 62", isSpecial: true, cities: ["Finnmark", "Sortland", "Bardufoss", "Lofoten", "Sandnessjøen", "Brønnøysund"] } }
+                { top: null, middle: { id: 24, uid: "24", name: "Linje 24", cities: ["Hønefoss"] }, bottom: { id: 25, uid: "25", name: "Linje 25", isSpecial: true, cities: ["Skeidar, Ålesund"] } },
+                { top: null, middle: { id: 26, uid: "26", name: "Linje 26", cities: ["Raufoss"] }, bottom: null },
+                { top: null, middle: { id: 27, uid: "27", name: "Linje 27", cities: ["Gjøvik", "Gran", "Dokka", "Lena", "Harestua"] }, bottom: null },
+                { top: null, middle: { id: 28, uid: "28", name: "Linje 28", cities: ["Kongsvinger", "Årnes", "Skarnes"] }, bottom: null },
+                { top: { id: 29, uid: "29", name: "Linje 29", isTop: true, cities: ["Sauda, Bremnes"] }, middle: { id: 30, uid: "30", name: "Linje 30", cities: ["Elverum", "Trysil"] }, bottom: null },
+                { top: { id: 31, uid: "31", name: "Linje 31", isTop: true, cities: ["Åkrehamn, Kopervik"] }, middle: { id: 32, uid: "32", name: "Linje 32", cities: ["Hamar", "Furnes", "Brumunddal"] }, bottom: null },
+                { top: { id: 33, uid: "33", name: "Linje 33", isTop: true, cities: ["Haugesund Terminal", "Stord", "Fitjar"] }, middle: { id: 34, uid: "34", name: "Linje 34", cities: ["Jessheim", "Dal", "Eidsvoll"] }, bottom: null },
+                { top: { id: 35, uid: "35", name: "Linje 35", isTop: true, cities: ["Bohus Vikse, Haugesund"] }, middle: { id: 36, uid: "36", name: "Linje 36", cities: ["Lillehammer", "Otta / Sørfron", "Åndalsnes"] }, bottom: null },
+                { top: { id: 37, uid: "37", name: "Linje 37", isTop: true, cities: ["Møbelringen Math Lande, Haugesund"] }, middle: { id: 38, uid: "38", name: "Linje 38", cities: ["Slettvoll Oslo"] }, bottom: null },
+                { top: { id: 39, uid: "39", name: "Linje 39", isTop: true, cities: ["Haugesund, Skeidar"] }, middle: null, bottom: null },
+                { top: { id: 40, uid: "40", name: "Linje 40", isTop: true, cities: ["Slettvoll In-Design, Fine Møbler Haugesund"] }, middle: null, bottom: null },
+                { top: { id: 41, uid: "41", name: "Linje 41", isTop: true, cities: ["Ølen, Etne"] }, middle: null, bottom: null },
+                { top: { id: 42, uid: "42", name: "Linje 42", isTop: true, cities: ["Flekkefjord", "Egersund", "Lyngdal", "Mandal"] }, middle: null, bottom: null },
+                { top: { id: 43, uid: "43", name: "Linje 43", isTop: true, cities: ["Bryne, Kleppe"] }, middle: null, bottom: { id: 44, uid: "44", name: "Linje 44", isSpecial: true, cities: ["Ulsteinvik", "Hareid", "Fosnavåg"] } },
+                { top: { id: 45, uid: "45", name: "Linje 45", isTop: true, cities: ["Stavanger Terminal", "Haukaas", "Jørpeland", "Slettvoll"] }, middle: null, bottom: { id: 46, uid: "46", name: "Linje 46", isSpecial: true, cities: ["Hovdebygda", "Ørsta", "Volda"] } },
+                { top: { id: 47, uid: "47", name: "Linje 47", isTop: true, cities: ["Stavanger", "Skeidar Tvedtsenter", "Skeidar Forus", "Fagmøbler Forus"] }, middle: null, bottom: null },
+                { top: { id: 48, uid: "48", name: "Linje 48", isTop: true, cities: ["Sandnes"] }, middle: null, bottom: null },
+                { top: { id: 49, uid: "49", name: "Linje 49", isTop: true, cities: ["Straume", "Godvik"] }, middle: null, bottom: { id: 50, uid: "50", name: "Linje 50", isSpecial: true, cities: ["Førde", "Florø", "Sandane", "Nordfjordeid", "Stryn", "Leirvik i Sogn", "Byastad"] } },
+                { top: { id: 51, uid: "51", name: "Linje 51", isTop: true, cities: ["Fyllingsdalen", "Kleppestø", "Strusshamn"] }, middle: null, bottom: null },
+                { top: { id: 52, uid: "52", name: "Linje 52", isTop: true, cities: ["Slettvoll Nyborg", "Ulset"] }, middle: null, bottom: null },
+                { top: { id: 53, uid: "53", name: "Linje 53", isTop: true, cities: ["Isdalstø Front", "Rådal 2 Bak"] }, middle: null, bottom: { id: 54, uid: "54", name: "Linje 54", isSpecial: true, cities: ["Mosjøen", "Mo i Rana", "Sandnessjøen", "Brønnøysund", "Fauske", "Harstad", "Bardu", "Finnsnes", "Tromsø", "Bodø", "Lofoten"] } },
+                { top: { id: 55, uid: "55", name: "Linje 55", isTop: true, cities: ["Rådal", "Nesstun", "Kokstad", "Blomsterdalen", "Paradis"] }, middle: null, bottom: null },
+                { top: { id: 56, uid: "56", name: "Linje 56", isTop: true, cities: ["Sogndal", "Kaupanger", "Øvre Årdal", "Voss", "Øystese"] }, middle: null, bottom: null },
+                { top: { id: 57, uid: "57", name: "Linje 57", isTop: true, cities: ["Namsos", "Spillum", "Kolvereid", "Steinkjær"] }, middle: null, bottom: null },
+                { top: { id: 58, uid: "58", name: "Linje 58", isTop: true, cities: ["Stjørdal", "Verdal", "Levanger"] }, middle: null, bottom: null },
+                { top: { id: 59, uid: "59", name: "Linje 59", isTop: true, cities: ["Møbelringen Lade", "Bohus Bo Møbler", "Bohus Tynset"] }, middle: null, bottom: null },
+                { top: { id: 60, uid: "60", name: "Linje 60", isTop: true, cities: ["Skeidar, Trondheim", "Tiller", "Orkanger", "Slettvoll Berge"] }, middle: null, bottom: null },
+                { top: { id: 61, uid: "61", name: "Linje 61", isTop: true, cities: ["Terminal Trøndelag", "Hitra", "Røros", "Brekstad", "Åfjord", "Kyrkjeseterøyra"] }, middle: null, bottom: null },
+                { top: { id: 62, uid: "62", name: "Linje 62", isTop: true, cities: ["Orkanger", "Surnadal", "Sunndalsøra", "Oppdal", "Leinstrand"] }, middle: null, bottom: { id: 63, uid: "63", name: "Linje 63", isSpecial: true, cities: ["Finnmark", "Sortland", "Bardufoss", "Lofoten", "Sandnessjøen", "Brønnøysund"] } }
             ]
         };
 
@@ -533,7 +535,6 @@
         scrollWrapper.addEventListener('scroll', updateMinimap, { passive: true });
         window.addEventListener('resize', updateMinimap);
 
-        // Ultrafast Touch & Drag Logic direkt über die gesamte Minimap
         let isDragging = false;
 
         function handleMove(clientX) {
@@ -550,7 +551,6 @@
             const percent = touchX / availableSpace;
             const maxScroll = scrollWrapper.scrollWidth - scrollWrapper.clientWidth;
             
-            // Direktes Setzen ohne Animation-Frame Verzögerung
             scrollWrapper.scrollLeft = percent * maxScroll;
             minimapThumb.style.left = `${touchX}px`;
         }
